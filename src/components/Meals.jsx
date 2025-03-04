@@ -9,7 +9,7 @@ const Meals = () => {
     data: loadedMeals,
     isLoading,
     error,
-  } = useHttp("http://localhost:3000/meals", requestConfig, []);
+  } = useHttp("https://foodie-food-order-app.onrender.com/meals", requestConfig, []);
 
   if (isLoading) {
     return <p className="center">Fetching Meals...</p>;

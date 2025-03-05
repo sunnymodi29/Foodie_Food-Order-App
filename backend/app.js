@@ -2,13 +2,12 @@ import fs from "node:fs/promises";
 
 import bodyParser from "body-parser";
 
-import 'dotenv/config';
+import "dotenv/config";
 import express from "express";
 import pkg from "pg";
-import cors from 'cors';
+import cors from "cors";
 
 const { Pool } = pkg;
-
 
 const app = express();
 
@@ -48,13 +47,28 @@ app.get("/meals", async (req, res) => {
 app.post("/orders", async (req, res) => {
   const orderData = req.body;
 
+  const orderId = Math.floor(Math.random() * 1000000).toString(); // Generate random ID
+
   // ✅ Validate order details
   if (!orderData || !orderData.items || orderData.items.length === 0) {
     return res.status(400).json({ message: "Missing order items." });
   }
 
-  const { name, email, street, city, "postal-code": postalCode } = orderData.customer;
-  if (!email || !email.includes("@") || !name || !street || !city || !postalCode) {
+  const {
+    name,
+    email,
+    street,
+    city,
+    "postal-code": postalCode,
+  } = orderData.customer;
+  if (
+    !email ||
+    !email.includes("@") ||
+    !name ||
+    !street ||
+    !city ||
+    !postalCode
+  ) {
     return res.status(400).json({
       message: "Missing required customer information.",
     });
@@ -65,7 +79,7 @@ app.post("/orders", async (req, res) => {
       `INSERT INTO orders (id, customer_email, customer_name, street, city, postal_code, items) 
        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
       [
-        orderData.id,
+        orderId,
         email,
         name,
         street,
@@ -75,7 +89,9 @@ app.post("/orders", async (req, res) => {
       ]
     );
 
-    res.status(201).json({ message: "Order created!", orderId: result.rows[0].id });
+    res
+      .status(201)
+      .json({ message: "Order created!", orderId: result.rows[0].id });
   } catch (error) {
     console.error("Database error:", error);
     res.status(500).json({ message: "Database error." });

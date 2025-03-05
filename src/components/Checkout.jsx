@@ -25,7 +25,10 @@ const Checkout = () => {
     error,
     sendRequest,
     clearData,
-  } = useHttp("https://foodie-food-order-app.onrender.com/orders", requestConfig);
+  } = useHttp(
+    "https://foodie-food-order-app.onrender.com/orders",
+    requestConfig
+  );
 
   const cartTotal = cartCtx.items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.price,
@@ -50,10 +53,8 @@ const Checkout = () => {
 
     sendRequest(
       JSON.stringify({
-        order: {
-          items: cartCtx.items,
-          customer: customerData,
-        },
+        items: cartCtx.items,
+        customer: customerData,
       })
     );
   }

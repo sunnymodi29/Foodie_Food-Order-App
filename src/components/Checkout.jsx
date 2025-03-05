@@ -98,7 +98,7 @@ const Checkout = () => {
         <p>Total Amount: {currencyFormatter.format(cartTotal)}</p>
 
         <Input label="Full Name" id="name" type="text" />
-        <Input label="E-Mail Address" id="email" type="emial" />
+        <Input label="E-Mail Address" id="email" type="email" />
         <Input label="Street" id="street" type="text" />
         <div className="control-row">
           <Input label="Postal Code" id="postal-code" type="text" />

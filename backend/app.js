@@ -98,6 +98,16 @@ app.post("/orders", async (req, res) => {
   }
 });
 
+app.get("/fetch-orders", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM orders");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
+});
+
 // app.post("/orders", async (req, res) => {
 //   const orderData = req.body.order;
 

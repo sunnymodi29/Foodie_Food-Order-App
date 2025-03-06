@@ -5,20 +5,17 @@ import MealItem from "./MealItem";
 
 const requestConfig = {};
 
-const API_URL =
-  window.location.hostname === "localhost"
-    ? import.meta.env.VITE_API_LOCAL_URL
-    : import.meta.env.VITE_API_HOST_URL;
-
-console.log("API URL:", API_URL + "/meals");
-
 const Meals = () => {
   // const [searchTerm, setSearchTerm] = useState("");
   const {
     data: loadedMeals,
     isLoading,
     error,
-  } = useHttp(API_URL + "/meals", requestConfig, []);
+  } = useHttp(
+    "https://foodie-food-order-app.onrender.com/meals",
+    requestConfig,
+    []
+  );
   // } = useHttp(
   //   "http://localhost:3000/meals",
   //   requestConfig,

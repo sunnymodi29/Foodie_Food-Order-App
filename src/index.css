@@ -4,6 +4,27 @@
   box-sizing: border-box;
 }
 
+:root {
+  --themeTextColor: #ffc404;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #29251b;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--themeTextColor);
+  border-radius: 10px;
+}
+
+
 body {
   margin: 0;
   font-family: 'Raleway', sans-serif;
@@ -32,7 +53,7 @@ body {
   height: 4rem;
   object-fit: contain;
   border-radius: 50%;
-  border: 2px solid #ffc404;
+  border: 2px solid var(--themeTextColor);
 }
 
 #main-header button {
@@ -45,7 +66,7 @@ h1 {
   font-weight: 700;
   font-size: 2rem;
   margin: 0;
-  color: #ffc404;
+  color: var(--themeTextColor);
   letter-spacing: 0.2rem;
   text-transform: uppercase;
 }
@@ -95,7 +116,7 @@ h1 {
 .meal-item-price {
   display: inline-block;
   background-color: #312c1d;
-  color: #ffc404;
+  color: var(--themeTextColor);
   font-size: 0.9rem;
   font-weight: bold;
   padding: 0.5rem 2rem;
@@ -166,7 +187,7 @@ h1 {
   border-radius: 50%;
   border: none;
   background-color: #312c1d;
-  color: #ffc404;
+  color: var(--themeTextColor);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -207,8 +228,8 @@ h1 {
 .button {
   font: inherit;
   cursor: pointer;
-  background-color: #ffc404;
-  border: 1px solid #ffc404;
+  background-color: var(--themeTextColor);
+  border: 1px solid var(--themeTextColor);
   color: #1f1a09;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
@@ -226,7 +247,7 @@ h1 {
   cursor: pointer;
   background-color: transparent;
   border: none;
-  color: #ffc404;
+  color: var(--themeTextColor);
 }
 
 .text-button:hover,
@@ -267,8 +288,17 @@ h1 {
   margin: 0;
 }
 
-.error h2{
+.error h2 {
   font-size: 1.3rem;
+}
+
+.back-button svg {
+  width: 35px;
+  background: var(--themeTextColor);
+  border-radius: 50%;
+  padding: 5px 5px;
+  cursor: pointer;
+  color: #1f1a09;
 }
 
 @keyframes fade-slide-up {

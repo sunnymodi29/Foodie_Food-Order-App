@@ -35,6 +35,13 @@ const Checkout = () => {
     0
   );
 
+  function handleBackToCart() {
+    userProgressCtx.hideCheckout();
+    setTimeout(() => {
+      userProgressCtx.showCart();
+    }, 0);
+  }
+
   function handleClose() {
     userProgressCtx.hideCheckout();
   }
@@ -92,7 +99,24 @@ const Checkout = () => {
   }
 
   return (
-    <Modal open={userProgressCtx.progress === "checkout"} onClose={handleClose}>
+    <Modal
+      className="checkout"
+      open={userProgressCtx.progress === "checkout"}
+      onClose={handleClose}
+    >
+      <span className="back-button" onClick={handleBackToCart} title="Back">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </span>
       <form onSubmit={handleSubmit}>
         <h2>Checkout</h2>
         <p>Total Amount: {currencyFormatter.format(cartTotal)}</p>

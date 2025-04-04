@@ -6,6 +6,7 @@ import "dotenv/config";
 import express from "express";
 import pkg from "pg";
 import cors from "cors";
+import bcrypt from "bcrypt";
 
 const { Pool } = pkg;
 
@@ -24,15 +25,10 @@ app.use(express.static("public"));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST", "OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
-
-// app.get("/meals", async (req, res) => {
-//   const meals = await fs.readFile("./data/available-meals.json", "utf8");
-//   res.json(JSON.parse(meals));
-// });
 
 app.get("/meals", async (req, res) => {
   try {
@@ -76,8 +72,8 @@ app.post("/orders", async (req, res) => {
 
   try {
     const result = await pool.query(
-      `INSERT INTO orders (id, customer_email, customer_name, street, city, postal_code, items) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+      `INSERT INTO orders (id, customer_email, customer_name, street, city, postal_code, items, user_id) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
       [
         orderId,
         email,
@@ -86,6 +82,7 @@ app.post("/orders", async (req, res) => {
         city,
         postalCode,
         JSON.stringify(orderData.items), // Store items as JSON
+        orderData.user_id,
       ]
     );
 
@@ -98,9 +95,13 @@ app.post("/orders", async (req, res) => {
   }
 });
 
-app.get("/fetch-orders", async (req, res) => {
+app.get("/fetch-orders/:user", async (req, res) => {
+  const userId = req.params.user;
+
   try {
-    const result = await pool.query("SELECT * FROM orders");
+    const result = await pool.query("SELECT * FROM orders WHERE user_id = $1", [
+      userId,
+    ]);
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -108,45 +109,62 @@ app.get("/fetch-orders", async (req, res) => {
   }
 });
 
-// app.post("/orders", async (req, res) => {
-//   const orderData = req.body.order;
+app.post("/signup", async (req, res) => {
+  const { username, email, password } = req.body;
 
-//   if (
-//     orderData === null ||
-//     orderData.items === null ||
-//     orderData.items.length === 0
-//   ) {
-//     return res.status(400).json({ message: "Missing data." });
-//   }
+  if (!email || !email.includes("@") || !username || !password) {
+    return res.status(400).json({ message: "Invalid input." });
+  }
 
-//   if (
-//     orderData.customer.email === null ||
-//     !orderData.customer.email.includes("@") ||
-//     orderData.customer.name === null ||
-//     orderData.customer.name.trim() === "" ||
-//     orderData.customer.street === null ||
-//     orderData.customer.street.trim() === "" ||
-//     orderData.customer["postal-code"] === null ||
-//     orderData.customer["postal-code"].trim() === "" ||
-//     orderData.customer.city === null ||
-//     orderData.customer.city.trim() === ""
-//   ) {
-//     return res.status(400).json({
-//       message:
-//         "Missing data: Email, name, street, postal code or city is missing.",
-//     });
-//   }
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-//   const newOrder = {
-//     ...orderData,
-//     id: (Math.random() * 1000).toString(),
-//   };
-//   const orders = await fs.readFile("./data/orders.json", "utf8");
-//   const allOrders = JSON.parse(orders);
-//   allOrders.push(newOrder);
-//   await fs.writeFile("./data/orders.json", JSON.stringify(allOrders));
-//   res.status(201).json({ message: "Order created!" });
-// });
+  try {
+    const result = await pool.query(
+      `INSERT INTO users (username, email, password) 
+       VALUES ($1, $2, $3) RETURNING id`,
+      [username, email, hashedPassword]
+    );
+
+    res
+      .status(201)
+      .json({ message: "User created!", userId: result.rows[0].id });
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ message: "Database error." });
+  }
+});
+
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Invalid input." });
+  }
+
+  try {
+    // Check if user exists
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ message: "User not found." });
+    }
+
+    const user = result.rows[0];
+
+    // Compare hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials." });
+    }
+
+    res.json({ message: "Login successful!", userId: user.id });
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ message: "Database error." });
+  }
+});
 
 app.use((req, res) => {
   if (req.method === "OPTIONS") {

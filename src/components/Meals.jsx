@@ -16,11 +16,6 @@ const Meals = () => {
     requestConfig,
     []
   );
-  // } = useHttp(
-  //   "http://localhost:3000/meals",
-  //   requestConfig,
-  //   []
-  // );
 
   // const filteredMeals = loadedMeals.filter((meal) =>
   //   meal.name.toLowerCase().includes(searchTerm.toLowerCase())

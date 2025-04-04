@@ -7,6 +7,7 @@ import Input from "./UI/Input";
 import Button from "./UI/Button";
 import useHttp from "../hooks/useHttp";
 import Error from "./Error";
+import { useAuth } from "../store/AuthContext";
 
 const requestConfig = {
   method: "POST",
@@ -18,6 +19,7 @@ const requestConfig = {
 const Checkout = () => {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
+  const { user } = useAuth();
 
   const {
     data,
@@ -62,6 +64,7 @@ const Checkout = () => {
       JSON.stringify({
         items: cartCtx.items,
         customer: customerData,
+        user_id: user,
       })
     );
   }

@@ -2,8 +2,9 @@ import { useNavigate } from "react-router-dom";
 import useHttp from "../hooks/useHttp";
 import { useAuth } from "../store/AuthContext";
 import { useEffect, useState } from "react";
-import Input from "./UI/Input";
+import Input from "../components/UI/Input";
 import { format } from "date-fns";
+import Error from "../components/Error";
 
 const requestConfig = {};
 
@@ -13,6 +14,8 @@ const Orders = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { user } = useAuth();
   const [selectedRange, setSelectedRange] = useState("all");
+
+  console.log(user);
 
   const {
     data: ordersData,
@@ -63,9 +66,9 @@ const Orders = () => {
     return <p className="center">Fetching Orders...</p>;
   }
 
-  if (error) {
-    return <Error title="Failed to fetch orders" message={error} />;
-  }
+  // if (error) {
+  //   return <Error title="Failed to fetch orders" message={error} />;
+  // }
 
   return (
     <div className="orders-container">
@@ -88,7 +91,7 @@ const Orders = () => {
         <option value="month">Past Month</option>
         <option value="3months">Past 3 Months</option>
       </select>
-
+      {console.log(filteredOrders)}
       {filteredOrders.length === 0 ? (
         <p className="no-orders">You haven't placed any orders yet.</p>
       ) : (

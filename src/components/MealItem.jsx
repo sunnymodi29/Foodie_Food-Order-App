@@ -9,7 +9,6 @@ const MealItem = ({ meal, customerData, type }) => {
 
   function handleAddMealToCart() {
     cartCtx.addItem(meal);
-    console.log(meal);
 
     Toastify({
       toastType: "success",

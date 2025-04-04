@@ -12,7 +12,7 @@ import { AuthProvider } from "./store/AuthContext";
 import { useAuth } from "./store/AuthContext";
 
 import { ToastContainer } from "react-toastify";
-import Profile from "./pages/Profile";
+// import Profile from "./pages/Profile";
 
 function AppContent() {
   const { user } = useAuth();

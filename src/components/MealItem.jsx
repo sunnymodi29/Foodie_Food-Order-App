@@ -2,12 +2,19 @@ import { useContext } from "react";
 import { currencyFormatter } from "../util/formatting";
 import Button from "./UI/Button";
 import CartContext from "../store/CartContext";
+import Toastify from "./Toastify";
 
 const MealItem = ({ meal, customerData, type }) => {
   const cartCtx = useContext(CartContext);
 
   function handleAddMealToCart() {
     cartCtx.addItem(meal);
+    console.log(meal);
+
+    Toastify({
+      toastType: "success",
+      message: `${meal.name} Added Successfully!`,
+    });
   }
 
   return (

@@ -4,6 +4,8 @@ import Button from "../components/UI/Button";
 import useHttp from "../hooks/useHttp";
 // import googleImage from "../assets/googleLogo.png";
 import { useAuth } from "../store/AuthContext";
+import logoImg from "../assets/logo-transparent.png";
+import Toastify from "../components/Toastify";
 
 const requestConfig = {
   method: "POST",
@@ -41,12 +43,25 @@ function Login() {
     clearData,
   } = useHttp(url, requestConfig);
 
-  function handleUserLogin() {
-    sendRequest(
-      JSON.stringify({
-        ...userData,
-      })
-    );
+  async function handleUserLogin() {
+    try {
+      await sendRequest(JSON.stringify({ ...userData }));
+
+      let toastMessage = isLoginMode
+        ? "Login Successful! 🍕"
+        : "Signup Successful! 🎉";
+
+      Toastify({
+        toastType: "success",
+        message: toastMessage,
+      });
+    } catch (error) {
+      Toastify({
+        toastType: "error",
+        message: "Oops! Something went wrong. Please try again.",
+      });
+    } finally {
+    }
   }
 
   useEffect(() => {
@@ -57,103 +72,86 @@ function Login() {
   }, [data]);
 
   return (
-    <div className="flex justify-center items-center h-screen bg-stone-700">
-      <div className="w-full max-w-sm bg-white p-6 rounded-md shadow-2xl m-4">
-        <div className="block mb-6 w-full text-md text-blue-500  text-right">
-          <span className="hover:underline cursor-pointer" onClick={toggleMode}>
-            {isLoginMode
-              ? "Create an account"
-              : "Already have an account? Log in"}
-          </span>
-        </div>
-        <h2 className="text-2xl font-bold text-center uppercase">
-          {isLoginMode ? "Welcome Back!" : "Create An Account"}
-        </h2>
-        <form onSubmit={(e) => e.preventDefault()} className="space-y-4 mt-6">
-          {!isLoginMode && (
-            <Input
-              type="text"
-              // labelName="User Name"
-              // isTextarea={false}
-              placeholder="Enter Your Name"
-              required
-              value={userData.username}
-              onChange={(e) =>
-                setUserData((prevState) => {
-                  return {
-                    ...prevState,
-                    username: e.target.value,
-                  };
-                })
-              }
-            />
-          )}
-          <Input
-            type="email"
-            // labelName="Email"
-            // isTextarea={false}
-            placeholder="Enter Your Email Address"
-            required
-            value={userData.email}
-            onChange={(e) =>
-              setUserData((prevState) => {
-                return {
-                  ...prevState,
-                  email: e.target.value,
-                };
-              })
-            }
-          />
-          <Input
-            type="password"
-            // labelName="Password"
-            // isTextarea={false}
-            placeholder="Enter Your Password"
-            required
-            value={userData.password}
-            onChange={(e) =>
-              setUserData((prevState) => {
-                return {
-                  ...prevState,
-                  password: e.target.value,
-                };
-              })
-            }
-          />
-
-          <Button
-            // additionalClasses="w-full uppercase tracking-wider font-semibold"
-            type="save"
-            onClick={() =>
-              isLoginMode ? handleUserLogin() : handleUserLogin()
-            }
-          >
-            {isLoginMode ? "Login" : "Sign Up"}
-          </Button>
-
-          <div className="flex items-center justify-between my-6">
-            <span className="w-2/3 border-b border-stone-700"></span>
-            <span className="text-gray-800 mx-3 text-sm uppercase">or</span>
-            <span className="w-2/3 border-b border-stone-700"></span>
+    <>
+      <div className="food-login-container">
+        <div className="food-login-card">
+          <div className="food-login-header">
+            <img src={logoImg} alt="Foodie Logo" className="logo" />
+            <h2>{isLoginMode ? "Welcome Back!" : "Join Foodie Today"}</h2>
+            <p>
+              {isLoginMode
+                ? "Login to continue"
+                : "Sign up to order your favorite meals"}
+            </p>
           </div>
 
-          {/* <Button
-            // additionalClasses="w-full flex items-center justify-center gap-2 hover:bg-stone-900 hover:border-stone-900 font-semibold whitespace-nowrap"
-            type="cancel"
-            onClick={onGoogleLogin}
+          <form
+            className="food-login-form"
+            onSubmit={(e) => e.preventDefault()}
           >
-            <img
-              src={googleImage}
-              alt="Google Logo"
-              width={25}
-              height={25}
-              className="select-none"
+            {!isLoginMode && (
+              <Input
+                type="text"
+                placeholder="Full Name"
+                required
+                value={userData.username}
+                onChange={(e) =>
+                  setUserData((prevState) => ({
+                    ...prevState,
+                    username: e.target.value,
+                  }))
+                }
+              />
+            )}
+            <Input
+              type="email"
+              placeholder="Email"
+              required
+              value={userData.email}
+              onChange={(e) =>
+                setUserData((prevState) => ({
+                  ...prevState,
+                  email: e.target.value,
+                }))
+              }
             />
-            Continue with Google
-          </Button> */}
-        </form>
+            <Input
+              type="password"
+              placeholder="Password"
+              required
+              value={userData.password}
+              onChange={(e) =>
+                setUserData((prevState) => ({
+                  ...prevState,
+                  password: e.target.value,
+                }))
+              }
+            />
+
+            <Button type="save" onClick={handleUserLogin} disabled={isSending}>
+              {isSending ? "Please wait..." : isLoginMode ? "Login" : "Sign Up"}
+            </Button>
+
+            <div className="food-toggle">
+              <span onClick={toggleMode}>
+                {isLoginMode
+                  ? "Don't have an account? Sign up"
+                  : "Already have an account? Login"}
+              </span>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+
+      {isSending && (
+        <div className="fullscreen-overlay">
+          <div className="spinner-large"></div>
+          <div className="loading-message">
+            {isLoginMode ? "Authenticating..." : "Creating your account..."}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

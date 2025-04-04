@@ -11,6 +11,8 @@ import Login from "./pages/Login";
 import { AuthProvider } from "./store/AuthContext";
 import { useAuth } from "./store/AuthContext";
 
+import { ToastContainer } from "react-toastify";
+
 function AppContent() {
   const { user } = useAuth();
 
@@ -40,6 +42,19 @@ function App() {
           </Router>
         </CartContextProvider>
       </UserProgressContextProvider>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={1500}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 }

@@ -123,7 +123,7 @@ const Profile = () => {
       <span className="profile-wrapper">
         <span className="profile-img">{userProfileVal}</span>
       </span>
-      {isSending && <Loader />}
+      {isSending && <Loader>Saving...</Loader>}
       <div></div>
       <h2>Edit Profile</h2>
 

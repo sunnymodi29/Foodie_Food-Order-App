@@ -148,7 +148,11 @@ function Login() {
         </div>
       </div>
 
-      {isSending && <Loader />}
+      {isSending && (
+        <Loader>
+          {isLoginMode ? "Authenticating..." : "Creating your account..."}
+        </Loader>
+      )}
     </>
   );
 }

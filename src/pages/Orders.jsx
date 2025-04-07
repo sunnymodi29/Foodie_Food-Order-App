@@ -20,7 +20,7 @@ const Orders = () => {
     isLoading,
     error,
   } = useHttp(
-    `https://foodie-food-order-app.onrender.com/fetch-orders/${user.id}`,
+    `https://foodie-food-order-app.onrender.com/fetch-orders/${user?.id}`,
     requestConfig,
     []
   );

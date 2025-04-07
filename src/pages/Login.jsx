@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import Input from "../components/UI/Input";
 import Button from "../components/UI/Button";
 import useHttp from "../hooks/useHttp";
-// import googleImage from "../assets/googleLogo.png";
 import { useAuth } from "../store/AuthContext";
 import logoImg from "../assets/logo-transparent.png";
 import Toastify from "../components/Toastify";
+import Loader from "../components/Loader";
 
 const requestConfig = {
   method: "POST",
@@ -20,7 +20,7 @@ function Login() {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const intialUserData = {
     username: "",
-    email: "",
+    email: JSON.parse(localStorage.getItem("user"))?.email || "",
     password: "",
   };
   const [userData, setUserData] = useState(intialUserData);
@@ -47,14 +47,16 @@ function Login() {
     try {
       await sendRequest(JSON.stringify({ ...userData }));
 
-      let toastMessage = isLoginMode
-        ? "Login Successful! 🍕"
-        : "Signup Successful! 🎉";
+      if (data) {
+        let toastMessage = isLoginMode
+          ? "Login Successful! 🍕"
+          : "Signup Successful! 🎉";
 
-      Toastify({
-        toastType: "success",
-        message: toastMessage,
-      });
+        Toastify({
+          toastType: "success",
+          message: toastMessage,
+        });
+      }
     } catch (error) {
       Toastify({
         toastType: "error",
@@ -67,7 +69,7 @@ function Login() {
   useEffect(() => {
     if (data) {
       console.log("Data received:", data);
-      login(data.userId);
+      login(data.user);
     }
   }, [data]);
 
@@ -107,7 +109,10 @@ function Login() {
               type="email"
               placeholder="Email"
               required
-              value={userData.email}
+              value={
+                JSON.parse(localStorage.getItem("user"))?.email ||
+                userData.email
+              }
               onChange={(e) =>
                 setUserData((prevState) => ({
                   ...prevState,
@@ -143,14 +148,7 @@ function Login() {
         </div>
       </div>
 
-      {isSending && (
-        <div className="fullscreen-overlay">
-          <div className="spinner-large"></div>
-          <div className="loading-message">
-            {isLoginMode ? "Authenticating..." : "Creating your account..."}
-          </div>
-        </div>
-      )}
+      {isSending && <Loader />}
     </>
   );
 }

@@ -125,9 +125,10 @@ app.post("/signup", async (req, res) => {
       [username, email, hashedPassword]
     );
 
-    res
-      .status(201)
-      .json({ message: "User created!", userId: result.rows[0].id });
+    res.status(201).json({
+      message: "User created!",
+      user: { username, email, password: hashedPassword, addresses: "" },
+    });
   } catch (error) {
     console.error("Database error:", error);
     res.status(500).json({ message: "Database error." });
@@ -159,7 +160,57 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    res.json({ message: "Login successful!", userId: user.id });
+    res.json({ message: "Login successful!", user: user });
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ message: "Database error." });
+  }
+});
+
+app.post("/editprofile", async (req, res) => {
+  const { user_id, username, email, password, new_password, addresses } =
+    req.body;
+
+  if (!email || !email.includes("@") || !username) {
+    return res.status(400).json({ message: "Invalid input." });
+  }
+
+  let hashedPassword;
+
+  // Always hash the new password, or keep the existing hashed one if not changed
+  if (new_password && new_password !== password) {
+    hashedPassword = await bcrypt.hash(new_password, 10);
+  } else {
+    // Fetch the user's existing hashed password from the database
+    const existing = await pool.query(
+      "SELECT password FROM users WHERE id = $1",
+      [user_id]
+    );
+    hashedPassword = existing.rows[0]?.password;
+  }
+
+  try {
+    const result = await pool.query(
+      `UPDATE users
+       SET username = $2,
+           email = $3,
+           password = $4,
+           addresses = $5
+       WHERE id = $1
+       RETURNING id`,
+      [user_id, username, email, hashedPassword, addresses]
+    );
+
+    let response = {
+      message: "Profile Edited Successfully!",
+      userId: user_id,
+    };
+
+    if (new_password && new_password !== password) {
+      response.passwordChanged = true;
+    }
+
+    res.status(201).json(response);
   } catch (error) {
     console.error("Database error:", error);
     res.status(500).json({ message: "Database error." });

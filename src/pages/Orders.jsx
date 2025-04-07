@@ -15,14 +15,12 @@ const Orders = () => {
   const { user } = useAuth();
   const [selectedRange, setSelectedRange] = useState("all");
 
-  console.log(user);
-
   const {
     data: ordersData,
     isLoading,
     error,
   } = useHttp(
-    `https://foodie-food-order-app.onrender.com/fetch-orders/${user}`,
+    `https://foodie-food-order-app.onrender.com/fetch-orders/${user.id}`,
     requestConfig,
     []
   );

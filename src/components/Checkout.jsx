@@ -64,7 +64,7 @@ const Checkout = () => {
       JSON.stringify({
         items: cartCtx.items,
         customer: customerData,
-        user_id: user,
+        user_id: user.id,
       })
     );
   }

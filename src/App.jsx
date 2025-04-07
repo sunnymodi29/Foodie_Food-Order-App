@@ -12,21 +12,21 @@ import { AuthProvider } from "./store/AuthContext";
 import { useAuth } from "./store/AuthContext";
 
 import { ToastContainer } from "react-toastify";
-// import Profile from "./pages/Profile";
+import Profile from "./pages/Profile";
 
 function AppContent() {
   const { user } = useAuth();
 
   return (
     <>
-      {user && <Header />}
+      {user && JSON.parse(localStorage.getItem("user"))?.id && <Header />}
       <Cart />
       <Checkout />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/orders" element={<Orders />} />
-        {/* <Route path="/profile" element={<Profile />} /> */}
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   );

@@ -17,10 +17,10 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (userData) => {
+  const login = (userData, loginViaProfile) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    navigate("/");
+    !loginViaProfile && navigate("/");
   };
 
   const logout = () => {

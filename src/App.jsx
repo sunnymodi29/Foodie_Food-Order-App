@@ -19,7 +19,7 @@ function AppContent() {
 
   return (
     <>
-      {user && JSON.parse(localStorage.getItem("user"))?.id && <Header />}
+      {user && <Header />}
       <Cart />
       <Checkout />
       <Routes>

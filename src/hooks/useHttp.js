@@ -23,15 +23,21 @@ export default function useHttp(url, config, initialData) {
   }
 
   const sendRequest = useCallback(
-    async function sendRequest(data) {
+    async function sendRequest(data, secondUrl) {
+      const urllink = secondUrl ? secondUrl : url;
       setisLoading(true);
       try {
-        const resData = await sendHttpRequest(url, { ...config, body: data });
+        const resData = await sendHttpRequest(urllink, {
+          ...config,
+          body: data,
+        });
         setData(resData);
+        setisLoading(false);
       } catch (error) {
         setError(error.message || "Something went wrong!");
+        setisLoading(false);
+        throw error;
       }
-      setisLoading(false);
     },
     [url, config]
   );

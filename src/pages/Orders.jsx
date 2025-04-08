@@ -89,7 +89,6 @@ const Orders = () => {
         <option value="month">Past Month</option>
         <option value="3months">Past 3 Months</option>
       </select>
-      {console.log(filteredOrders)}
       {filteredOrders.length === 0 ? (
         <p className="no-orders">You haven't placed any orders yet.</p>
       ) : (

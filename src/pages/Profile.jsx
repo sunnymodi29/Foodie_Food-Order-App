@@ -16,14 +16,10 @@ const requestConfig = {
 };
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, login } = useAuth();
   const navigate = useNavigate();
 
-  console.log(user);
-
   const userProfileVal = getFirstCharcters(user?.username);
-
-  console.log(userProfileVal);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -95,10 +91,23 @@ const Profile = () => {
       addresses: updatedAddressArray,
     };
 
+    let loginJSON = {
+      username: name,
+      email,
+      password,
+    };
+
     console.log(updatedProfileJSON);
 
     await sendRequest(JSON.stringify(updatedProfileJSON));
+
+    await sendRequest(
+      JSON.stringify(loginJSON),
+      "https://foodie-food-order-app.onrender.com/login"
+    );
   };
+
+  let loginViaProfile = false;
 
   useEffect(() => {
     if (data && !isSending) {
@@ -116,7 +125,12 @@ const Profile = () => {
         }, 0);
       }
     }
-  }, [data]);
+    if (data?.user) {
+      loginViaProfile = true;
+      login(data.user, loginViaProfile);
+    }
+    setNewPassword("");
+  }, [data, isSending]);
 
   return (
     <div className="profile-container">

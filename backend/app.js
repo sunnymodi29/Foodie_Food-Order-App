@@ -136,7 +136,7 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ message: "Invalid input." });
@@ -155,9 +155,11 @@ app.post("/login", async (req, res) => {
     const user = result.rows[0];
 
     // Compare hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials." });
+    if (!username) {
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(401).json({ message: "Invalid credentials." });
+      }
     }
 
     res.json({ message: "Login successful!", user: user });

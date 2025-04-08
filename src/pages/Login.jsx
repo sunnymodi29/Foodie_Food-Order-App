@@ -46,21 +46,14 @@ function Login() {
   async function handleUserLogin() {
     try {
       await sendRequest(JSON.stringify({ ...userData }));
-
-      if (data) {
-        let toastMessage = isLoginMode
-          ? "Login Successful! 🍕"
-          : "Signup Successful! 🎉";
-
-        Toastify({
-          toastType: "success",
-          message: toastMessage,
-        });
-      }
+      
     } catch (error) {
       Toastify({
         toastType: "error",
-        message: "Oops! Something went wrong. Please try again.",
+        message:
+          error.message.includes("401") || error.message.includes("Invalid")
+            ? "Invalid Credentials!!"
+            : error.message || "Something went wrong!",
       });
     } finally {
     }
@@ -68,7 +61,14 @@ function Login() {
 
   useEffect(() => {
     if (data) {
-      console.log("Data received:", data);
+      let toastMessage = isLoginMode
+        ? "Login Successful! 🍕"
+        : "Signup Successful! 🎉";
+
+      Toastify({
+        toastType: "success",
+        message: toastMessage,
+      });
       login(data.user);
     }
   }, [data]);

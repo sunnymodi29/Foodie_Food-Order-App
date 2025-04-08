@@ -35,7 +35,6 @@ const MealItem = ({ meal, customerData, type }) => {
             <Button onClick={handleAddMealToCart}>Add to Cart</Button>
           </p>
         )}
-        {/* {console.log(customerData)} */}
         <div>
           <p></p>
         </div>

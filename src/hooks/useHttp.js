@@ -33,6 +33,7 @@ export default function useHttp(url, config, initialData) {
         });
         setData(resData);
         setisLoading(false);
+        return resData;
       } catch (error) {
         setError(error.message || "Something went wrong!");
         setisLoading(false);

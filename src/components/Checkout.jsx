@@ -1,5 +1,5 @@
 import Modal from "./UI/Modal";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import CartContext from "../store/CartContext";
 import UserProgressContext from "../store/UserProgressContext";
 import { currencyFormatter } from "../util/formatting";
@@ -8,6 +8,7 @@ import Button from "./UI/Button";
 import useHttp from "../hooks/useHttp";
 import Error from "./Error";
 import { useAuth } from "../store/AuthContext";
+import Addresses from "./Addresses";
 
 const requestConfig = {
   method: "POST",
@@ -20,6 +21,15 @@ const Checkout = () => {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
   const { user } = useAuth();
+
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+
+  useEffect(() => {
+    if (user?.addresses) {
+      setAddresses(user.addresses);
+    }
+  }, [user]);
 
   const {
     data,
@@ -54,16 +64,28 @@ const Checkout = () => {
     clearData();
   }
 
+  function handleSelectedAddresses(selectedAddr) {
+    setSelectedAddress(selectedAddr);
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
-    const customerData = Object.fromEntries(formData.entries());
+    // const formData = new FormData(event.target);
+    // const customerData = Object.fromEntries(formData.entries());
+
+    // console.log(
+    //   JSON.stringify({
+    //     items: cartCtx.items,
+    //     customer: selectedAddress,
+    //     user_id: user.id,
+    //   })
+    // );
 
     sendRequest(
       JSON.stringify({
         items: cartCtx.items,
-        customer: customerData,
+        customer: selectedAddress,
         user_id: user.id,
       })
     );
@@ -74,7 +96,9 @@ const Checkout = () => {
       <Button type="button" textOnly onClick={handleClose}>
         Close
       </Button>
-      <Button>Submit Order</Button>
+      <Button type="submit" onClick={handleSubmit}>
+        Submit Order
+      </Button>
     </>
   );
 
@@ -120,17 +144,26 @@ const Checkout = () => {
           />
         </svg>
       </span>
-      <form onSubmit={handleSubmit}>
+      <form>
         <h2>Checkout</h2>
         <p>Total Amount: {currencyFormatter.format(cartTotal)}</p>
 
-        <Input label="Full Name" id="name" type="text" />
+        <Addresses
+          addresses={addresses}
+          setAddresses={setAddresses}
+          editable="true"
+          isSelectAddress="true"
+          handleSelectedAddresses={handleSelectedAddresses}
+          selectedAddress={selectedAddress}
+        />
+
+        {/* <Input label="Full Name" id="name" type="text" />
         <Input label="E-Mail Address" id="email" type="email" />
         <Input label="Street" id="street" type="text" />
         <div className="control-row">
           <Input label="Postal Code" id="postal-code" type="text" />
           <Input label="City" id="city" type="text" />
-        </div>
+        </div> */}
 
         {error && <Error title="Failed to submit order" message={error} />}
 

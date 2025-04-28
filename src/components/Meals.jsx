@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useHttp from "../hooks/useHttp";
 import Error from "./Error";
 import MealItem from "./MealItem";
+import Toastify from "./Toastify";
 
 const requestConfig = {};
 
 const Meals = () => {
   // const [searchTerm, setSearchTerm] = useState("");
+
   const {
     data: loadedMeals,
     isLoading,
@@ -16,6 +18,19 @@ const Meals = () => {
     requestConfig,
     []
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isLoading) {
+        Toastify({
+          toastType: "info",
+          message: "Still fetching meals... Please wait a moment.",
+        });
+      }
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, [isLoading]);
 
   // const filteredMeals = loadedMeals.filter((meal) =>
   //   meal.name.toLowerCase().includes(searchTerm.toLowerCase())

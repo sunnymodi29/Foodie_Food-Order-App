@@ -8,6 +8,11 @@
   --themeTextColor: #ffc404;
 }
 
+::selection{
+  background: var(--themeTextColor);
+  color: #000;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 8px;
@@ -358,12 +363,12 @@ h1 {
 }
 
 .modal-actions .text-button {
-  color: #1d1a16;
+  color: var(--text-light);
 }
 
 .modal-actions .text-button:hover,
 .modal-actions .text-button:active {
-  color: #312c1d;
+  color: var(--themeTextColor);
 }
 
 .cart-total {
@@ -372,13 +377,14 @@ h1 {
   margin: 2rem 0;
   font-size: 1.15rem;
   font-weight: bold;
-  color: #46443c;
+  color: var(--text-light);
 }
 
 .cart-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
   margin: 0.5rem 0;
 }
 
@@ -399,7 +405,7 @@ h1 {
   height: 1.5rem;
   border-radius: 50%;
   border: none;
-  background-color: #312c1d;
+  background-color: var(--card-bg);
   color: var(--themeTextColor);
   display: flex;
   justify-content: center;
@@ -408,8 +414,8 @@ h1 {
 
 .cart-item-actions button:hover,
 .cart-item-actions button:active {
-  background-color: #1d1a16;
-  color: #ffab04;
+  background-color: var(--themeTextColor);
+  color: var(--secondary-bg);
 }
 
 .control {
@@ -469,7 +475,8 @@ h1 {
 }
 
 .modal {
-  background-color: #e4ddd4;
+  background-color: var(--primary-bg);
+  color: #fff;
   border-radius: 6px;
   border: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
@@ -477,6 +484,10 @@ h1 {
   width: 80%;
   max-width: 40rem;
   animation: fade-slide-up 0.3s ease-out forwards;
+}
+
+.modal h2 {
+  color: var(--themeTextColor);
 }
 
 .modal::backdrop {
@@ -849,23 +860,23 @@ body {
   margin: 0;
 }
 
-.profile-container {
+.card-container {
   background-color: #1f1b14;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  width: 400px;
+  width: 500px;
   margin: 0 auto;
 }
 
-.profile-container h2 {
+.card-container h2 {
   color: #f4a900;
   text-align: center;
   margin-bottom: 20px;
 }
 
 .profile-form label,
-.profile-container label {
+.card-container label {
   display: inline-block;
   font-weight: bold;
   margin-top: 10px;
@@ -874,7 +885,7 @@ body {
   cursor: pointer;
 }
 
-.profile-container input {
+.card-container input, input {
   width: 100%;
   max-width: 100%;
   padding: 10px;
@@ -899,12 +910,12 @@ body {
   margin-bottom: 10px;
 }
 
-.profile-container button {
+.card-container button {
   width: 100%;
   margin-top: 20px;
 }
 
-/* .profile-container button.text-button {
+/* .card-container button.text-button {
   margin-top: 20px;
 } */
 
@@ -945,7 +956,26 @@ button:hover {
   padding: 20px 0 20px 0;
 }
 
-.address-card:last-child {
+.address-card.select-address {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  cursor: pointer;
+  transition: 0.2S all ease-in-out;
+}
+
+.address-card.select-address:hover{
+  background: var(--card-bg);
+  border-color: var(--themeTextColor);
+}
+
+.address-card.select-address.selected{
+  background: var(--card-bg);
+  border-color: var(--themeTextColor);
+}
+
+.address-card:not(.select-address):last-child {
   border: 0;
 }
 
@@ -977,7 +1007,7 @@ button:hover {
 
 /* Make profile section responsive */
 @media (max-width: 768px) {
-  .profile-container {
+  .card-container {
     width: 90%;
     padding: 1rem;
     margin: 0 auto;
@@ -1110,4 +1140,48 @@ button:hover {
   display: flex;
   justify-content: center;
   letter-spacing: 0px;
+}
+
+/* styles/Checkout.css */
+
+.checkout-container {
+  background-color: #29251c;
+  color: #f3f1e8;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: sans-serif;
+}
+
+.checkout-container h2 {
+  margin-bottom: 1rem;
+}
+
+.saved-addresses {
+  margin-bottom: 1.5rem;
+}
+
+/* .address-card {
+  background-color: #3b3528;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+} */
+
+/* .address-card:hover {
+  border-color: #f3f1e8;
+} */
+
+.address-card.selected {
+  border-color: #ffcc70;
+  background-color: #443c2d;
+}
+
+.add-address-form {
+  background-color: #1f1b13;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
 }

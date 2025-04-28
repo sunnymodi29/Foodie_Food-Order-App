@@ -55,7 +55,7 @@ app.post("/orders", async (req, res) => {
     email,
     street,
     city,
-    "postal-code": postalCode,
+    "postal_code": postalCode,
   } = orderData.customer;
   if (
     !email ||

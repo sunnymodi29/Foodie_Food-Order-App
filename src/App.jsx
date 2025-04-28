@@ -13,6 +13,7 @@ import { useAuth } from "./store/AuthContext";
 
 import { ToastContainer } from "react-toastify";
 import Profile from "./pages/Profile";
+// import CheckoutPage from "./pages/CheckoutPage";
 
 function AppContent() {
   const { user } = useAuth();
@@ -27,6 +28,7 @@ function AppContent() {
         <Route path="/login" element={<Login />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/profile" element={<Profile />} />
+        {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
       </Routes>
     </>
   );

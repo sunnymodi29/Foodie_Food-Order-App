@@ -5,10 +5,12 @@ import { useContext } from "react";
 import CartContext from "../store/CartContext";
 import UserProgressContext from "../store/UserProgressContext";
 import CartItem from "./CartItem";
+// import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
+  // const navigate = useNavigate();
 
   const cartTotal = cartCtx.items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.price,
@@ -49,6 +51,7 @@ const Cart = () => {
         </Button>
         {cartCtx.items.length > 0 && (
           <Button onClick={handleGoToCheckout}>Go to Checkout</Button>
+          // <Button onClick={navigate("/checkout")}>Go to Checkout</Button>
         )}
       </p>
     </Modal>

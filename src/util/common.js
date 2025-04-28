@@ -1,4 +1,4 @@
-function getFirstCharcters(str) {
+function getFirstCharacters(str) {
   if (str) {
     const userProfileVal =
       str.split(" ").length > 1
@@ -10,4 +10,4 @@ function getFirstCharcters(str) {
   }
 }
 
-export default getFirstCharcters;
+export default getFirstCharacters;

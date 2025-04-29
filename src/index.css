@@ -35,6 +35,10 @@
   line-height: 24px;
 } */
 
+.w-100 {
+  width: 100%;
+}
+
 @media only screen and (max-width: 480px) {
   .Toastify__toast {
     --toastify-toast-width: auto;
@@ -429,14 +433,14 @@ h1 {
   margin-bottom: 0.5rem;
 }
 
-.control input {
+/* .control input {
   width: 100%;
   max-width: 20rem;
   font: inherit;
   padding: 0.5rem;
   border-radius: 4px;
   border: 1px solid #ccc;
-}
+} */
 
 .control-row {
   display: flex;
@@ -894,6 +898,7 @@ body {
   border: 1px solid #444;
   background-color: #2d261c;
   color: white;
+  font-size: inherit;
 }
 
 .address-list {
@@ -910,8 +915,8 @@ body {
   margin-bottom: 10px;
 }
 
-.card-container button {
-  width: 100%;
+.card-container button, .address-section button {
+  /* width: 100%; */
   margin-top: 20px;
 }
 
@@ -962,17 +967,21 @@ button:hover {
   padding: 20px;
   margin: 20px 0;
   cursor: pointer;
-  transition: 0.2S all ease-in-out;
+  transition: 0.2s all ease-in-out;
 }
 
 .address-card.select-address:hover{
   background: var(--card-bg);
-  border-color: var(--themeTextColor);
 }
 
 .address-card.select-address.selected{
   background: var(--card-bg);
   border-color: var(--themeTextColor);
+}
+
+.address-card.select-address.selected .address-type {
+  border-color: var(--text-muted);
+  transition: 0.2s all ease-in-out;
 }
 
 .address-card:not(.select-address):last-child {
@@ -1003,6 +1012,16 @@ button:hover {
   padding: 0 20px 20px;
   border-radius: 10px;
   margin-top: 20px;
+}
+
+.formWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 13px;
+}
+
+.formWrapper .control {
+  margin: 0;
 }
 
 /* Make profile section responsive */
@@ -1184,4 +1203,5 @@ button:hover {
   padding: 1rem;
   border-radius: 8px;
   margin-top: 1rem;
+  text-align: center;
 }

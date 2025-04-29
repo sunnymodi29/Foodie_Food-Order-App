@@ -27,7 +27,7 @@ const Meals = () => {
           message: "Still fetching meals... Please wait a moment.",
         });
       }
-    }, 2500);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, [isLoading]);

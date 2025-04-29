@@ -73,8 +73,6 @@ const Profile = () => {
     const response = await sendRequest(JSON.stringify(updatedProfileJSON));
     setPasswordChangedState(response);
 
-    await setEditedData(data);
-
     await sendRequest(
       JSON.stringify(loginJSON),
       "https://foodie-food-order-app.onrender.com/login"
@@ -82,10 +80,6 @@ const Profile = () => {
   };
 
   let loginViaProfile = false;
-
-  async function setEditedData(data) {
-    console.log(data);
-  }
 
   useEffect(() => {
     if (data && !isSending) {
@@ -151,7 +145,7 @@ const Profile = () => {
           editable="true"
         />
 
-        <Button onClick={handleSaveChanges}>Save Changes</Button>
+        <Button className="w-100" onClick={handleSaveChanges}>Save Changes</Button>
       </div>
     </Card>
   );

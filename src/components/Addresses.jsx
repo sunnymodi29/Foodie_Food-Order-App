@@ -51,7 +51,7 @@ const Addresses = ({
       {editable && !isSelectAddress && (
         <Button
           type="button"
-          className="add-address-btn"
+          className="add-address-btn w-100"
           onClick={() => setShowAddForm(true)}
         >
           Add New Address
@@ -60,7 +60,7 @@ const Addresses = ({
 
       {showAddForm && (
         <div className="add-address-form">
-          <form>
+          <form className="formWrapper">
             <Input
               type="text"
               required
@@ -95,7 +95,7 @@ const Addresses = ({
               }
             />
           </form>
-          <Button type="submit" onClick={handleAddAddress}>
+          <Button type="submit" className="w-100" onClick={handleAddAddress}>
             Save Address
           </Button>
           <Button textOnly onClick={handleCancelAddress}>

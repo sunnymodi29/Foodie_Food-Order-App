@@ -17,10 +17,17 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (userData, loginViaProfile) => {
+  const login = (userData, loginViaProfile, isAdmin) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    !loginViaProfile && navigate("/");
+    if (!loginViaProfile) {
+      if (isAdmin) {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
+    }
+    // !loginViaProfile && navigate("/");
   };
 
   const logout = () => {

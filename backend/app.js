@@ -55,7 +55,7 @@ app.post("/orders", async (req, res) => {
     email,
     street,
     city,
-    "postal_code": postalCode,
+    postal_code: postalCode,
   } = orderData.customer;
   if (
     !email ||
@@ -99,9 +99,19 @@ app.get("/fetch-orders/:user", async (req, res) => {
   const userId = req.params.user;
 
   try {
-    const result = await pool.query("SELECT * FROM orders WHERE user_id = $1", [
+    const isAdminUser = await pool.query("SELECT * FROM users WHERE id = $1", [
       userId,
     ]);
+
+    let result;
+    if (isAdminUser.rows[0].admin) {
+      result = await pool.query("SELECT * FROM orders");
+    } else {
+      result = await pool.query("SELECT * FROM orders WHERE user_id = $1", [
+        userId,
+      ]);
+    }
+
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -216,6 +226,73 @@ app.post("/editprofile", async (req, res) => {
   } catch (error) {
     console.error("Database error:", error);
     res.status(500).json({ message: "Database error." });
+  }
+});
+
+// Dashboard summary API
+app.get("/dashboard-summary", async (req, res) => {
+  try {
+    const client = await pool.connect();
+
+    // Total users
+    const userResult = await client.query("SELECT COUNT(*) FROM users");
+    const totalUsers = parseInt(userResult.rows[0].count);
+
+    // Total orders
+    const ordersResult = await client.query("SELECT COUNT(*) FROM orders");
+    const totalOrders = parseInt(ordersResult.rows[0].count);
+
+    // Total revenue — loop through all orders and sum price * quantity from `items`
+    const revenueResult = await client.query("SELECT items FROM orders");
+    let totalRevenue = 0;
+    revenueResult.rows.forEach((row) => {
+      const items = row.items;
+      if (Array.isArray(items)) {
+        items.forEach((item) => {
+          totalRevenue += parseFloat(item.price) * item.quantity;
+        });
+      }
+    });
+
+    // Recent 5 orders
+    const recentOrdersResult = await client.query(`
+      SELECT id, customer_name, customer_email, created_at, order_status, items
+      FROM orders
+      ORDER BY created_at DESC
+      LIMIT 5
+    `);
+
+    const recentOrders = recentOrdersResult.rows.map((order) => {
+      let total = 0;
+      const items = order.items;
+      if (Array.isArray(items)) {
+        items.forEach((item) => {
+          total += parseFloat(item.price) * item.quantity;
+        });
+      }
+
+      return {
+        id: order.id,
+        customer_name: order.customer_name,
+        customer_email: order.customer_email,
+        created_at: order.created_at,
+        order_status: order.order_status,
+        total: Number(total.toFixed(2)),
+        items: order.items,
+      };
+    });
+
+    client.release();
+
+    res.json({
+      totalUsers,
+      totalOrders,
+      totalRevenue: Number(totalRevenue.toFixed(2)),
+      recentOrders,
+    });
+  } catch (error) {
+    console.error("Error in /dashboard-summary:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

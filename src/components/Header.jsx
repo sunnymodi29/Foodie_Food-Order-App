@@ -11,7 +11,7 @@ const Header = () => {
   const navigate = useNavigate();
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const totalCartItems = cartCtx.items.reduce((totalNumberOfItems, item) => {
     return totalNumberOfItems + item.quantity;
@@ -34,8 +34,8 @@ const Header = () => {
         <h1>Foodie</h1>
       </div>
       <nav>
-        {location.pathname !== "/" && (
-          <Button textOnly onClick={() => navigate("/")}>
+        {location.pathname !== "/" && location.pathname !== "/dashboard" && (
+          <Button textOnly onClick={() => user?.admin ? navigate("/dashboard") : navigate("/")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -49,7 +49,7 @@ const Header = () => {
           </Button>
         )}
 
-        <Button textOnly onClick={handleShowCart}>
+        {!user?.admin && <Button textOnly onClick={handleShowCart}>
           <span className="outerWrapper">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +62,7 @@ const Header = () => {
             </svg>
             <span className="number">{totalCartItems}</span>
           </span>
-        </Button>
+        </Button>}
 
         <Dropdown
           options={userOptions}

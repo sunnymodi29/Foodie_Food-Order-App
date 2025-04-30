@@ -69,7 +69,7 @@ function Login() {
         toastType: "success",
         message: toastMessage,
       });
-      login(data.user);
+      login(data.user, false, data.user.admin);
     }
   }, [data]);
 

@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
           hasShownToast.current = true;
 
           // Don't show the toast if it was a manual logout by an admin
-          if (!wasManualLogout) {
+          if (!wasManualLogout && user !== null) {
             Toastify({
               toastType: "error",
               message: "You’re not authorized to access this page!!",
@@ -31,7 +31,7 @@ const ProtectedRoute = ({ children }) => {
             sessionStorage.removeItem("manualLogout");
           }
 
-          if (!user?.admin) {
+          if (user !== null && !user?.admin) {
             const from = location.state?.from?.pathname || "/"; // Redirect to login for non-admins
             navigate(from, { replace: true });
           }

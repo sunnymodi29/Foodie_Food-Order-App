@@ -130,6 +130,66 @@
   display: inline-block;
 }
 
+.add-meal-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  /* background-color: #1f1b14; */
+  border-radius: 10px;
+  color: white;
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 1rem;
+  background-color: var(--secondary-bg);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  overflow-y: auto;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+}
+/* 
+.input-field, .file-input, select {
+  padding: 0.8rem;
+  background-color: #3a3226;
+  border: 1px solid #444;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.input-field:focus, select:focus {
+  outline: none;
+  border-color: #f4c430;
+} */
+
+.submit-button {
+  padding: 1rem;
+  background-color: #f4c430;
+  color: black;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #e3b129;
+}
+
+
 
 
 /* 

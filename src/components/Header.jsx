@@ -6,7 +6,7 @@ import UserProgressContext from "../store/UserProgressContext";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "./DropDown";
 import { useAuth } from "../store/AuthContext";
-import { House, ShoppingCart, User, UserRound } from "lucide-react";
+import { FilePlus2, House, ShoppingCart, User } from "lucide-react";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -52,6 +52,12 @@ const Header = () => {
               <ShoppingCart size={30} />
               <span className="number">{totalCartItems}</span>
             </span>
+          </Button>
+        )}
+
+        {user?.admin && location.pathname !== "/addmeals" && (
+          <Button textOnly onClick={() => navigate("/addmeals")}>
+            <FilePlus2 size={30} />
           </Button>
         )}
 

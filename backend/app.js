@@ -234,27 +234,23 @@ app.get("/dashboard-summary", async (req, res) => {
   try {
     const client = await pool.connect();
 
-    // Total users
-    const userResult = await client.query("SELECT COUNT(*) FROM users");
-    const totalUsers = parseInt(userResult.rows[0].count);
+    // Total users and orders
+    const countResult = await client.query(`
+      SELECT
+        (SELECT COUNT(*) FROM users) AS total_users,
+        (SELECT COUNT(*) FROM orders) AS total_orders
+    `);
+    const { total_users, total_orders } = countResult.rows[0];
 
-    // Total orders
-    const ordersResult = await client.query("SELECT COUNT(*) FROM orders");
-    const totalOrders = parseInt(ordersResult.rows[0].count);
+    // Revenue calculation directly in SQL
+    const revenueResult = await client.query(`
+      SELECT SUM((item->>'price')::numeric * (item->>'quantity')::int) AS total_revenue
+      FROM orders,
+      LATERAL jsonb_array_elements(items) AS item
+    `);
+    const totalRevenue = parseFloat(revenueResult.rows[0].total_revenue || 0);
 
-    // Total revenue — loop through all orders and sum price * quantity from `items`
-    const revenueResult = await client.query("SELECT items FROM orders");
-    let totalRevenue = 0;
-    revenueResult.rows.forEach((row) => {
-      const items = row.items;
-      if (Array.isArray(items)) {
-        items.forEach((item) => {
-          totalRevenue += parseFloat(item.price) * item.quantity;
-        });
-      }
-    });
-
-    // Recent 5 orders
+    // Recent orders
     const recentOrdersResult = await client.query(`
       SELECT id, customer_name, customer_email, created_at, order_status, items
       FROM orders
@@ -270,7 +266,6 @@ app.get("/dashboard-summary", async (req, res) => {
           total += parseFloat(item.price) * item.quantity;
         });
       }
-
       return {
         id: order.id,
         customer_name: order.customer_name,
@@ -285,14 +280,38 @@ app.get("/dashboard-summary", async (req, res) => {
     client.release();
 
     res.json({
-      totalUsers,
-      totalOrders,
+      totalUsers: parseInt(total_users),
+      totalOrders: parseInt(total_orders),
       totalRevenue: Number(totalRevenue.toFixed(2)),
       recentOrders,
     });
   } catch (error) {
     console.error("Error in /dashboard-summary:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Add New Meal API
+app.post("/add-meal", async (req, res) => {
+  const mealData = req.body;
+
+  if (!mealData) {
+    return res.status(400).json({ message: "Missing meal data." });
+  }
+
+  const { name, description, price, category, image } = mealData;
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO meals (name, description, price, image, category) 
+       VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+      [name, description, price, image, category]
+    );
+
+    res.status(201).json({ message: "Meal Added!", mealId: result.rows[0].id });
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ message: "Database error." });
   }
 });
 

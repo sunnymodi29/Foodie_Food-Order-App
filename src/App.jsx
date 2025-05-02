@@ -17,6 +17,7 @@ import { ToastContainer } from "react-toastify";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ScrollToTopButton from "./components/UI/ScrollToTopButton";
+import AddMeals from "./Admin/AddMeals";
 // import CheckoutPage from "./pages/CheckoutPage";
 
 function AppContent() {
@@ -39,6 +40,14 @@ function AppContent() {
             <ProtectedRoute>
               <Dashboard />
               {/* <DashboardV2 /> */}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/addmeals"
+          element={
+            <ProtectedRoute>
+              <AddMeals />
             </ProtectedRoute>
           }
         />

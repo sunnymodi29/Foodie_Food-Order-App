@@ -1,7 +1,7 @@
 // SkeletonText.jsx
 export default function SkeletonText({ width = "100%", height = "20px" }) {
   return (
-    <div
+    <span
       className="skeleton-loader"
       style={{
         width,
@@ -12,6 +12,6 @@ export default function SkeletonText({ width = "100%", height = "20px" }) {
         backgroundSize: "400% 100%",
         animation: "skeleton-shimmer 1.5s ease-in-out infinite",
       }}
-    ></div>
+    ></span>
   );
 }

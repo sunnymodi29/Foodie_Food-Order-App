@@ -2,12 +2,12 @@ import { BarChart3, Users, ShoppingCart, DollarSign } from "lucide-react";
 import "../Admin/adminIndex.css";
 import useHttp from "../hooks/useHttp";
 import { useEffect, useState } from "react";
+import SkeletonText from "../components/UI/SkeletonText";
 
 const requestConfig = {};
 
 export default function Dashboard() {
   const [dashboardSummary, setDashboardSummary] = useState(null);
-  const [orderStatus, setOrderStatus] = useState("Pending");
 
   const {
     data: dashboardData,
@@ -36,7 +36,13 @@ export default function Dashboard() {
           <AdminCardContent className="card-content">
             <div>
               <h2 className="card-title">Orders</h2>
-              <p className="card-value">{dashboardSummary?.totalOrders || 0}</p>
+              <p className="card-value">
+                {isLoading || !dashboardSummary ? (
+                  <SkeletonText />
+                ) : (
+                  dashboardSummary.totalOrders
+                )}
+              </p>
             </div>
             <ShoppingCart size={32} />
           </AdminCardContent>
@@ -46,7 +52,13 @@ export default function Dashboard() {
           <AdminCardContent className="card-content">
             <div>
               <h2 className="card-title">Revenue</h2>
-              <p className="card-value">${dashboardData.totalRevenue || 0}</p>
+              <p className="card-value">
+                {isLoading || !dashboardSummary ? (
+                  <SkeletonText />
+                ) : (
+                  `$${dashboardSummary.totalRevenue}`
+                )}
+              </p>
             </div>
             <DollarSign size={32} />
           </AdminCardContent>
@@ -56,7 +68,13 @@ export default function Dashboard() {
           <AdminCardContent className="card-content">
             <div>
               <h2 className="card-title">Users</h2>
-              <p className="card-value">{dashboardData.totalUsers || 0}</p>
+              <p className="card-value">
+                {isLoading || !dashboardSummary ? (
+                  <SkeletonText />
+                ) : (
+                  dashboardSummary.totalUsers
+                )}
+              </p>
             </div>
             <Users size={32} />
           </AdminCardContent>
@@ -89,55 +107,61 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {dashboardData?.recentOrders?.map((orders) => {
-                return (
-                  <tr>
-                    <td>#{orders.id}</td>
-                    <td>{orders.customer_name}</td>
-                    <td>
-                      {orders.items.map((item, index) => {
-                        return (
-                          <span className="ordered_mealName">
+              {isLoading
+                ? Array.from({ length: 5 }).map((_, idx) => (
+                    <tr key={idx}>
+                      <td>
+                        <SkeletonText />
+                      </td>
+                      <td>
+                        <SkeletonText />
+                      </td>
+                      <td>
+                        <SkeletonText />
+                      </td>
+                      <td>
+                        <SkeletonText />
+                      </td>
+                      <td>
+                        <SkeletonText />
+                      </td>
+                      <td>
+                        <SkeletonText />
+                      </td>
+                    </tr>
+                  ))
+                : dashboardData?.recentOrders?.map((orders) => (
+                    <tr key={orders.id}>
+                      <td>#{orders.id}</td>
+                      <td>{orders.customer_name}</td>
+                      <td>
+                        {orders.items.map((item, index) => (
+                          <span className="ordered_mealName" key={index}>
                             {item.name}
                             {index < orders.items.length - 1 && ", "}
                           </span>
-                        );
-                      })}
-                    </td>
-                    <td>${orders.total}</td>
-                    <td
-                      className={`status-${
-                        orders.order_status
-                          ?.replaceAll(" ", "")
-                          .toLocaleLowerCase() || "pending"
-                      }`}
-                    >
-                      {orders.order_status}
-                    </td>
-                    <td>
-                      {new Date(orders.created_at).toDateString() +
-                        " : " +
-                        new Date(orders.created_at)
-                          .toTimeString()
-                          .split("GMT")[0]
-                          .trim()}
-                    </td>
-                  </tr>
-                );
-              })}
-
-              {/* <tr>
-                <td>#12346</td>
-                <td>John Smith</td>
-                <td>$13.50</td>
-                <td className="status-pending">Pending</td>
-              </tr>
-              <tr>
-                <td>#12347</td>
-                <td>Alice Lee</td>
-                <td>$7.99</td>
-                <td className="status-cancelled">Cancelled</td>
-              </tr> */}
+                        ))}
+                      </td>
+                      <td>${orders.total}</td>
+                      <td
+                        className={`status-${
+                          orders.order_status
+                            ?.replaceAll(" ", "")
+                            .toLocaleLowerCase() || "pending"
+                        }`}
+                      >
+                        {orders.order_status}
+                      </td>
+                      <td>
+                        {new Date(orders.created_at).toDateString() +
+                          " : " +
+                          new Date(orders.created_at)
+                            .toTimeString()
+                            .split("GMT")[0]
+                            .trim()}
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>

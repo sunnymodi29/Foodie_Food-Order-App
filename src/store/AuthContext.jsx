@@ -5,6 +5,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,6 +16,7 @@ export const AuthProvider = ({ children }) => {
     } else {
       navigate("/login");
     }
+    setLoading(false);
   }, []);
 
   const login = (userData, loginViaProfile, isAdmin) => {
@@ -27,17 +29,20 @@ export const AuthProvider = ({ children }) => {
         navigate("/");
       }
     }
+    setLoading(false);
     // !loginViaProfile && navigate("/");
   };
 
   const logout = () => {
+    sessionStorage.setItem("manualLogout", "true");
     setUser(null);
     localStorage.removeItem("user");
-    navigate("/login");
+    sessionStorage.removeItem("manualLogout");
+    navigate("/login", { replace: true });
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

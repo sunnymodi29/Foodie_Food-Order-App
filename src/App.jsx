@@ -16,6 +16,7 @@ import { useAuth } from "./store/AuthContext";
 import { ToastContainer } from "react-toastify";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ScrollToTopButton from "./components/UI/ScrollToTopButton";
 // import CheckoutPage from "./pages/CheckoutPage";
 
 function AppContent() {
@@ -23,6 +24,7 @@ function AppContent() {
 
   return (
     <>
+      <ScrollToTopButton />
       {user && <Header />}
       <Cart />
       <Checkout />
@@ -31,17 +33,15 @@ function AppContent() {
         <Route path="/login" element={<Login />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/profile" element={<Profile />} />
-        {user?.admin && (
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-                {/* <DashboardV2 /> */}
-              </ProtectedRoute>
-            }
-          />
-        )}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+              {/* <DashboardV2 /> */}
+            </ProtectedRoute>
+          }
+        />
         {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
       </Routes>
     </>

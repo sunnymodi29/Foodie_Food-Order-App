@@ -8,7 +8,7 @@
   --themeTextColor: #ffc404;
 }
 
-::selection{
+::selection {
   background: var(--themeTextColor);
   color: #000;
 }
@@ -39,6 +39,47 @@
 .w-100 {
   width: 100%;
 }
+
+.scroll_top {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: var(--themeTextColor);
+  color: var(--secondary-bg);
+  border-radius: 50px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.scroll-to-top {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 30px;
+  right: 20px;
+  background-color: var(--themeTextColor);
+  color: var(--secondary-bg);
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.scroll-to-top:hover {
+  /* background-color: #e0a800; */
+  background-color: #ffab04;
+}
+
 
 @media only screen and (max-width: 480px) {
   .Toastify__toast {
@@ -890,7 +931,8 @@ body {
   cursor: pointer;
 }
 
-.card-container input, input {
+.card-container input,
+input {
   width: 100%;
   max-width: 100%;
   padding: 10px;
@@ -916,7 +958,8 @@ body {
   margin-bottom: 10px;
 }
 
-.card-container button, .address-section button {
+.card-container button,
+.address-section button {
   /* width: 100%; */
   margin-top: 20px;
 }
@@ -925,7 +968,7 @@ body {
   margin-top: 20px;
 } */
 
-.border{
+.border {
   display: block;
   margin-top: 20px;
   border-bottom: 1px solid var(--border-color);
@@ -971,11 +1014,11 @@ button:hover {
   transition: 0.2s all ease-in-out;
 }
 
-.address-card.select-address:hover{
+.address-card.select-address:hover {
   background: var(--card-bg);
 }
 
-.address-card.select-address.selected{
+.address-card.select-address.selected {
   background: var(--card-bg);
   border-color: var(--themeTextColor);
 }

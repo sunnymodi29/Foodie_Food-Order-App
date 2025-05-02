@@ -937,7 +937,7 @@ body {
 
 .card-container input,
 input,
-select,
+select:not(.date-filter),
 textarea {
   width: 100%;
   max-width: 100%;

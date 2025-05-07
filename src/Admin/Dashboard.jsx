@@ -3,6 +3,7 @@ import "../Admin/adminIndex.css";
 import useHttp from "../hooks/useHttp";
 import { useEffect, useState } from "react";
 import SkeletonText from "../components/UI/SkeletonText";
+import { formatDateTime, formatNumberWithK } from "../util/common";
 
 const requestConfig = {};
 
@@ -28,14 +29,29 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <h1 className="dashboard-title">Admin Dashboard</h1>
+      <h1 className="dashboard-title">Dashboard</h1>
 
       {/* Overview Cards */}
       <div className="overview-grid">
         <AdminCard className="card">
           <AdminCardContent className="card-content">
             <div>
-              <h2 className="card-title">Orders</h2>
+              <p className="card-value">
+                {isLoading || !dashboardSummary ? (
+                  <SkeletonText />
+                ) : (
+                  dashboardSummary.totalUsers
+                )}
+              </p>
+              <h2 className="card-title">Users</h2>
+            </div>
+            <Users size={32} />
+          </AdminCardContent>
+        </AdminCard>
+
+        <AdminCard className="card">
+          <AdminCardContent className="card-content">
+            <div>
               <p className="card-value">
                 {isLoading || !dashboardSummary ? (
                   <SkeletonText />
@@ -43,6 +59,7 @@ export default function Dashboard() {
                   dashboardSummary.totalOrders
                 )}
               </p>
+              <h2 className="card-title">Orders</h2>
             </div>
             <ShoppingCart size={32} />
           </AdminCardContent>
@@ -51,40 +68,24 @@ export default function Dashboard() {
         <AdminCard className="card">
           <AdminCardContent className="card-content">
             <div>
-              <h2 className="card-title">Revenue</h2>
               <p className="card-value">
                 {isLoading || !dashboardSummary ? (
                   <SkeletonText />
                 ) : (
-                  `$${dashboardSummary.totalRevenue}`
+                  `$${dashboardSummary.totalRevenue?.toFixed(2)}`
                 )}
               </p>
+              <h2 className="card-title">Revenue</h2>
             </div>
             <DollarSign size={32} />
-          </AdminCardContent>
-        </AdminCard>
-
-        <AdminCard className="card">
-          <AdminCardContent className="card-content">
-            <div>
-              <h2 className="card-title">Users</h2>
-              <p className="card-value">
-                {isLoading || !dashboardSummary ? (
-                  <SkeletonText />
-                ) : (
-                  dashboardSummary.totalUsers
-                )}
-              </p>
-            </div>
-            <Users size={32} />
           </AdminCardContent>
         </AdminCard>
 
         {/* <AdminCard className="card">
           <AdminCardContent className="card-content">
             <div>
-              <h2 className="card-title">Reports</h2>
               <p className="card-value">5</p>
+              <h2 className="card-title">Reports</h2>
             </div>
             <BarChart3 size={32} />
           </AdminCardContent>
@@ -152,14 +153,7 @@ export default function Dashboard() {
                       >
                         {orders.order_status}
                       </td>
-                      <td>
-                        {new Date(orders.created_at).toDateString() +
-                          " : " +
-                          new Date(orders.created_at)
-                            .toTimeString()
-                            .split("GMT")[0]
-                            .trim()}
-                      </td>
+                      <td>{formatDateTime(orders.created_at)}</td>
                     </tr>
                   ))}
             </tbody>

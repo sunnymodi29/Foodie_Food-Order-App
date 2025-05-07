@@ -32,11 +32,91 @@ app.use((req, res, next) => {
 
 app.get("/meals", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM meals");
+    const result = await pool.query("SELECT * FROM meals ORDER BY id ASC");
     res.json(result.rows);
   } catch (err) {
     console.error(err);
     res.status(500).send("Server error");
+  }
+});
+
+app.patch("/edit-meal", async (req, res) => {
+  const { id, name, description, price, category } = req.body;
+
+  if (!id || !name || !description || !price) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  try {
+    const result = await pool.query(
+      `UPDATE meals 
+       SET name = $1, description = $2, price = $3, category = $4 
+       WHERE id = $5 RETURNING *`,
+      [name, description, price, category || null, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Meal not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Meal updated successfully", meal: result.rows[0] });
+  } catch (err) {
+    console.error("Error updating meal:", err);
+    res.status(500).json({ message: "Server error while updating meal" });
+  }
+});
+
+app.patch("/update-meal-stock", async (req, res) => {
+  const { mealId, inStock } = req.body;
+
+  if (typeof inStock !== "boolean" || !mealId) {
+    return res.status(400).json({ message: "Invalid input" });
+  }
+
+  try {
+    const result = await pool.query(
+      `UPDATE meals SET "inStock" = $1 WHERE id = $2 RETURNING *`,
+      [inStock, mealId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Meal not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Stock status updated", meal: result.rows[0] });
+  } catch (err) {
+    console.error("Error updating stock:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.delete("/delete-meal", async (req, res) => {
+  const { id } = req.body;
+
+  if (!id) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  try {
+    const result = await pool.query(
+      `DELETE FROM meals WHERE id = $1 RETURNING *`,
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Meal not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Meal Deleted successfully", meal: result.rows[0] });
+  } catch (err) {
+    console.error("Error deleting meal:", err);
+    res.status(500).json({ message: "Server error while deleting meal" });
   }
 });
 
@@ -105,14 +185,52 @@ app.get("/fetch-orders/:user", async (req, res) => {
 
     let result;
     if (isAdminUser.rows[0].admin) {
-      result = await pool.query("SELECT * FROM orders");
+      result = await pool.query(
+        "SELECT * FROM orders ORDER BY created_at DESC"
+      );
     } else {
       result = await pool.query("SELECT * FROM orders WHERE user_id = $1", [
         userId,
       ]);
     }
 
-    res.json(result.rows);
+    const ordersWithTotal = result.rows.map((order) => {
+      let total = 0;
+      const items = order.items;
+
+      if (Array.isArray(items)) {
+        items.forEach((item) => {
+          total += parseFloat(item.price) * item.quantity;
+        });
+      }
+
+      return {
+        ...order,
+        total: Number(total.toFixed(2)),
+      };
+    });
+
+    res.json(ordersWithTotal);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
+});
+
+app.patch("/update-order-status", async (req, res) => {
+  const { orderId, status } = req.body;
+
+  if (!orderId || !status) {
+    return res.status(400).json({ message: "Missing orderId or status" });
+  }
+
+  try {
+    await pool.query("UPDATE orders SET order_status = $1 WHERE id = $2", [
+      status,
+      orderId,
+    ]);
+
+    res.json({ message: "Order status updated successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).send("Server error");

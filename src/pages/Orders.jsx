@@ -3,8 +3,7 @@ import useHttp from "../hooks/useHttp";
 import { useAuth } from "../store/AuthContext";
 import { useEffect, useState } from "react";
 import Input from "../components/UI/Input";
-import { format } from "date-fns";
-import Error from "../components/Error";
+import { formatDateTime } from "../util/common";
 
 const requestConfig = {};
 
@@ -70,7 +69,7 @@ const Orders = () => {
 
   return (
     <div className="orders-container">
-      <h2>Your Orders</h2>
+      <h2>Your Orders ({filteredOrders.length || 0})</h2>
       <Input
         type="text"
         placeholder="Search by meal name..."
@@ -97,10 +96,20 @@ const Orders = () => {
             <div className="order-header">
               <span>Order ID: #{order.id}</span>
               <small className="order-date">
-                Placed on:{" "}
-                {format(new Date(order.created_at), "dd MMM yyyy, hh:mm a")}
+                Placed on: {formatDateTime(order.created_at)}
               </small>
-              {/* <span className="status">Status: Delivered</span> */}
+              <span>
+                <span>Status: </span>
+                <span
+                  className={`status-${
+                    order.order_status
+                      ?.replaceAll(" ", "")
+                      .toLocaleLowerCase() || "pending"
+                  }`}
+                >
+                  {order.order_status}
+                </span>
+              </span>
             </div>
             <div className="order-address">
               <strong>Delievering Address: </strong>

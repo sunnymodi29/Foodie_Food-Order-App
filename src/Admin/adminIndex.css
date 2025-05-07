@@ -1,20 +1,48 @@
-.dashboard-container {
+#admin-main-header {
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  /* position: sticky;
+  top: 0;
+  box-shadow: 0 0 3px 0 #29251c;
+  background: rgba(42, 38, 29, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px); */
+}
+
+/* #admin-main-header nav {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+} */
+
+
+
+.dashboard-container,
+.menu-container {
   background-color: #29251c;
   color: white;
-  padding: 24px;
+  padding: 24px 24px 24px 0;
   max-width: 1600px;
   margin: 0 auto;
 }
 
-.dashboard-title {
-  font-size: 2rem;
+.dashboard-title,
+.admin-title {
+  font-size: 2.2rem;
   font-weight: bold;
   margin-bottom: 24px;
+  text-align: center;
+  color: var(--accent);
+  text-transform: capitalize;
+  letter-spacing: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .overview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
 }
@@ -27,25 +55,32 @@
 
 .custom-card-content {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding: 16px;
+  gap: 20px;
+  flex-direction: row-reverse;
 }
 
 .card-title {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
+  margin: 0;
 }
 
 .card-value {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: bold;
+  margin: 0;
+  margin-bottom: 10px;
+  color: var(--themeTextColor);
 }
 
 .orders-table-container {
   background-color: #3a3427;
   border-radius: 12px;
   padding: 16px;
+  margin-top: 1.5rem;
 }
 
 .table-title {
@@ -92,9 +127,18 @@
   color: #4682B4;
 }
 
-.ordered_mealName {
+.ordered_mealName,
+.meal_description {
   white-space: wrap;
-  max-width: 100px;
+  /* max-width: 100px; */
+}
+
+.meal_description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+  display: inline-block;
 }
 
 .skeleton {
@@ -159,6 +203,7 @@
   flex-direction: column;
   gap: 0rem;
 }
+
 /* 
 .input-field, .file-input, select {
   padding: 0.8rem;
@@ -188,6 +233,61 @@
 
 .submit-button:hover {
   background-color: #e3b129;
+}
+
+.table_img img {
+  width: 100%;
+  height: 100%;
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.edit-meal-form {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.out-of-stock {
+  background-color: #2e2b24;
+  color: #cfcfcf;
+}
+
+.admin-main .orders-container,
+.admin-main .add-meal-container {
+  margin: 24px auto;
+  padding: 0 24px 0 0;
+  box-shadow: none;
+  max-width: 100%;
+  background-color: transparent;
+  overflow-y: revert;
+}
+
+.admin-main .date-filter {
+  margin: 0;
+}
+
+
+@media (max-width: 768px) {
+
+  .dashboard-container,
+  .menu-container,
+  .admin-main .orders-container,
+  .admin-main .add-meal-container {
+    padding-left: 24px;
+  }
+
+  .add-meal-container {
+    margin: 3rem 24px;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .dashboard-title,
+  .admin-title {
+    font-size: 1.7rem;
+  }
 }
 
 

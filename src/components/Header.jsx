@@ -6,7 +6,7 @@ import UserProgressContext from "../store/UserProgressContext";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "./DropDown";
 import { useAuth } from "../store/AuthContext";
-import { FilePlus2, House, ShoppingCart, User } from "lucide-react";
+import { House, ShoppingCart, User } from "lucide-react";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -28,23 +28,32 @@ const Header = () => {
     { label: "Logout", onClick: () => logout() },
   ];
 
+  const adminUserOptions = [
+    { label: "Profile", to: "/profile" },
+    { label: "Logout", onClick: () => logout() },
+  ];
+
   return (
-    <header id="main-header">
-      <div id="title">
-        <img src={logoImg} alt="Foodie Logo" />
-        <h1>Foodie</h1>
-      </div>
+    <header id={user?.admin ? "admin-main-header" : "main-header"}>
+      {!user?.admin && (
+        <div id="title">
+          <img src={logoImg} alt="Foodie Logo" />
+          <h1>Foodie</h1>
+        </div>
+      )}
       <nav>
-        {location.pathname !== "/" && location.pathname !== "/dashboard" && (
-          <Button
-            textOnly
-            onClick={() =>
-              user?.admin ? navigate("/dashboard") : navigate("/")
-            }
-          >
-            <House size={30} />
-          </Button>
-        )}
+        {!user?.admin &&
+          location.pathname !== "/" &&
+          location.pathname !== "/admin/dashboard" && (
+            <Button
+              textOnly
+              onClick={() =>
+                user?.admin ? navigate("/admin/dashboard") : navigate("/")
+              }
+            >
+              <House size={30} />
+            </Button>
+          )}
 
         {!user?.admin && (
           <Button textOnly onClick={handleShowCart}>
@@ -55,14 +64,8 @@ const Header = () => {
           </Button>
         )}
 
-        {user?.admin && location.pathname !== "/addmeals" && (
-          <Button textOnly onClick={() => navigate("/addmeals")}>
-            <FilePlus2 size={30} />
-          </Button>
-        )}
-
         <Dropdown
-          options={userOptions}
+          options={user?.admin ? adminUserOptions : userOptions}
           trigger={({ onClick }) => (
             <Button textOnly onClick={onClick}>
               <User size={30} />

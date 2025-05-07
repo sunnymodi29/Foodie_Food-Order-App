@@ -40,6 +40,28 @@
   width: 100%;
 }
 
+img {
+  user-select: none;
+}
+
+input::file-selector-button {
+  font: inherit;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid var(--themeTextColor);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border-color: #ffab04;
+  color: var(--themeTextColor);
+  margin-right: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+input::file-selector-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .scroll_top {
   position: absolute;
   bottom: 10px;
@@ -258,6 +280,22 @@ body {
   animation: spin 1s linear infinite;
 }
 
+.spinner_wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner-small {
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top: 3px solid #ffb347;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  cursor: not-allowed;
+}
+
 .loading-message {
   color: #fff;
   font-size: 1.1rem;
@@ -409,10 +447,16 @@ h1 {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  font-weight: 600;
 }
 
 .modal-actions .text-button {
   color: var(--text-light);
+  font-weight: 400;
 }
 
 .modal-actions .text-button:hover,
@@ -524,7 +568,7 @@ h1 {
 }
 
 .modal {
-  background-color: var(--primary-bg);
+  background-color: #1f1b14;
   color: #fff;
   border-radius: 6px;
   border: none;
@@ -535,12 +579,13 @@ h1 {
   animation: fade-slide-up 0.3s ease-out forwards;
 }
 
-.modal h2 {
+.modal h2,
+.modal strong {
   color: var(--themeTextColor);
 }
 
 .modal::backdrop {
-  background-color: rgba(0, 0, 0, 0.55);
+  background-color: rgba(0, 0, 0, 0.85);
 }
 
 .center {

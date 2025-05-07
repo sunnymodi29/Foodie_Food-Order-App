@@ -1,0 +1,22 @@
+/* layouts/AdminLayout.css */
+
+.admin-layout {
+    display: flex;
+}
+
+.admin-main {
+    margin-left: 244px;
+    /* padding: 20px; */
+    background-color: #29251c;
+    color: white;
+    /* min-height: 100vh; */
+    width: calc(100% - 244px);
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .admin-main {
+        margin-left: 0;
+        width: 100%;
+    }
+}

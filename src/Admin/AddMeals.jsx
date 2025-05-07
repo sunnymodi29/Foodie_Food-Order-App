@@ -48,7 +48,7 @@ export default function AddMeals() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.price || !formData.category) {
+    if (!formData.name || !formData.description || !formData.price) {
       Toastify({
         toastType: "error",
         message: "Please fill in all required fields!",
@@ -73,7 +73,7 @@ export default function AddMeals() {
           });
 
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/admin/menu");
         }, 10);
       }
     } catch (err) {
@@ -84,7 +84,7 @@ export default function AddMeals() {
   return (
     <div className="add-meal-container">
       {isSending && <Loader>Adding...</Loader>}
-      <h1 className="page-title">🍽️ Add New Meal</h1>
+      <h1 class="admin-title">Add New Meal</h1>
       <form onSubmit={handleSubmit} className="form-container">
         <Input
           label="Enter Meal Name:"
@@ -125,7 +125,6 @@ export default function AddMeals() {
           value={formData.category}
           onChange={handleChange}
           className="input-field"
-          required
         >
           <option value="">Select Category</option>
           <option value="burger">Burger</option>

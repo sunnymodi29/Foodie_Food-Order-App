@@ -59,9 +59,9 @@ const Meals = () => {
         ) : (
           <p className="center">No meals found</p>
         )} */}
-        {loadedMeals.map((meal) => (
-          <MealItem key={meal.id} meal={meal} />
-        ))}
+        {loadedMeals.map(
+          (meal) => meal.inStock && <MealItem key={meal.id} meal={meal} />
+        )}
       </ul>
     </>
   );

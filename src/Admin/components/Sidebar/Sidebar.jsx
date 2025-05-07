@@ -1,4 +1,4 @@
-import logoImg from "../assets/logo.jpg";
+import logoImg from "../../../assets/logo.jpg";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../Sidebar/Sidebar.css";

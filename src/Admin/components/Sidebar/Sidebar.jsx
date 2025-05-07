@@ -1,3 +1,4 @@
+import logoImg from "../assets/logo.jpg";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../Sidebar/Sidebar.css";
@@ -39,7 +40,7 @@ export default function Sidebar() {
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="sidebar-brand">
-            <img alt="Foodie Logo" src="/src/assets/logo.jpg" />
+            <img src={logoImg} alt="Foodie Logo" />
             <h1>Foodie</h1>
           </div>
           {isOpen && (

@@ -55,7 +55,7 @@ const Profile = () => {
     const getCurrencyData = async () => {
       try {
         const response = await fetch(
-          "http://foodie-food-order-app.onrender.com/get-currency"
+          "https://foodie-food-order-app.onrender.com/get-currency"
         );
 
         if (!response.ok) {

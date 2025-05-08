@@ -84,7 +84,7 @@ export default function AddMeals() {
   return (
     <div className="add-meal-container">
       {isSending && <Loader>Adding...</Loader>}
-      <h1 class="admin-title">Add New Meal</h1>
+      <h1 className="admin-title">Add New Meal</h1>
       <form onSubmit={handleSubmit} className="form-container">
         <Input
           label="Enter Meal Name:"

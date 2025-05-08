@@ -7,6 +7,8 @@ import { formatDateTime } from "../util/common";
 const requestConfig = {};
 
 const AdminOrdersPage = () => {
+  const { currencyFormatter } = useAuth();
+
   const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const { user } = useAuth();
@@ -109,7 +111,9 @@ const AdminOrdersPage = () => {
 
   return (
     <div className="orders-container">
-      <h1 class="admin-title">Manage Orders ({filteredOrders.length || 0})</h1>
+      <h1 className="admin-title">
+        Manage Orders ({filteredOrders.length || 0})
+      </h1>
       <Input
         type="text"
         placeholder="Search by meal name..."
@@ -158,7 +162,7 @@ const AdminOrdersPage = () => {
                         </span>
                       ))}
                     </td>
-                    <td>${orders.total}</td>
+                    <td>{currencyFormatter(orders.total)}</td>
                     <td>
                       {updatingOrderId === orders.id ? (
                         <div className="spinner_wrap">

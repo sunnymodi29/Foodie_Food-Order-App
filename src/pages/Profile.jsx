@@ -9,6 +9,7 @@ import Toastify from "../components/Toastify";
 import getFirstCharacters from "../util/common";
 import Addresses from "../components/Addresses";
 import Card from "../components/UI/Card";
+import CustomDropdown from "../components/CustomDropdown";
 
 const requestConfig = {
   method: "POST",
@@ -18,7 +19,7 @@ const requestConfig = {
 };
 
 const Profile = () => {
-  const { user, login } = useAuth();
+  const { user, login, updateCurrency } = useAuth();
   const navigate = useNavigate();
 
   const userProfileVal = getFirstCharacters(user?.username);
@@ -29,6 +30,7 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState("");
   const [addresses, setAddresses] = useState([]);
   const [passwordChangedState, setPasswordChangedState] = useState("");
+  const [currencyData, setCurrencyData] = useState();
 
   useEffect(() => {
     if (user) {
@@ -49,6 +51,30 @@ const Profile = () => {
     requestConfig
   );
 
+  useEffect(() => {
+    const getCurrencyData = async () => {
+      try {
+        const response = await fetch(
+          "http://foodie-food-order-app.onrender.com/get-currency"
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to get currency data");
+        }
+        const cdata = await response.json();
+        cdata && setCurrencyData(cdata);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getCurrencyData();
+  }, []);
+
+  const handleCurrencyChange = () => {
+    handleSaveChanges();
+  };
+
   const handleSaveChanges = async () => {
     let updatedAddressArray = JSON.stringify([...addresses]);
     let user_id = user.id;
@@ -60,6 +86,7 @@ const Profile = () => {
       password,
       new_password: newPassword,
       addresses: updatedAddressArray,
+      currency_code: localStorage.getItem("currency"),
     };
 
     let loginJSON = {
@@ -72,6 +99,10 @@ const Profile = () => {
 
     const response = await sendRequest(JSON.stringify(updatedProfileJSON));
     setPasswordChangedState(response);
+
+    if (response?.currency_code) {
+      updateCurrency(response.currency_code);
+    }
 
     await sendRequest(
       JSON.stringify(loginJSON),
@@ -106,6 +137,12 @@ const Profile = () => {
 
   return (
     <Card>
+      <div className="currency_wrapper">
+        <CustomDropdown
+          currencyData={currencyData}
+          handleCurrencyChange={handleCurrencyChange}
+        />
+      </div>
       <span className="profile-wrapper">
         <span className="profile-img">{userProfileVal}</span>
       </span>
@@ -145,7 +182,9 @@ const Profile = () => {
           editable="true"
         />
 
-        <Button className="w-100" onClick={handleSaveChanges}>Save Changes</Button>
+        <Button className="w-100" onClick={handleSaveChanges}>
+          Save Changes
+        </Button>
       </div>
     </Card>
   );

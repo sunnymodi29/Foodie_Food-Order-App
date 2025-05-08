@@ -129,7 +129,7 @@ const Orders = () => {
                     <p>{item.description}</p>
                     <span>
                       Quantity: {item.quantity} × ${item.price} = $
-                      {(item.quantity * parseFloat(item.price)).toFixed(2)}
+                      {(item.quantity * parseFloat(item.price)).toFixed()}
                     </span>
                   </div>
                 </div>

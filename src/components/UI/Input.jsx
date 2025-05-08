@@ -1,6 +1,6 @@
 const Input = ({ label, id, isTextarea = false, type, ...props }) => {
   const handleKeyDown = (e) => {
-    if (e.key === "-" || e.key === "e") {
+    if (e.key === "-" || e.key === "." || e.key === "e") {
       e.preventDefault();
     }
   };

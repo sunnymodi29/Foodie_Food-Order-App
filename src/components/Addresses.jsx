@@ -48,7 +48,7 @@ const Addresses = ({
 
   return (
     <div className="address-section">
-      {editable && !isSelectAddress && (
+      {editable && !isSelectAddress && !user?.admin && (
         <Button
           type="button"
           className="add-address-btn w-100"
@@ -104,52 +104,54 @@ const Addresses = ({
         </div>
       )}
 
-      <span className="border"></span>
+      {!user?.admin && (
+        <>
+          <span className="border"></span>
 
-      <div
-        className="accordion-header"
-        onClick={() => setIsAccordionOpen(!isAccordionOpen)}
-      >
-        <label>Saved Addresses </label>
-        <span>{isAccordionOpen ? "▲" : "▼"}</span>
-      </div>
+          <div
+            className="accordion-header"
+            onClick={() => setIsAccordionOpen(!isAccordionOpen)}
+          >
+            <label>Saved Addresses </label>
+            <span>{isAccordionOpen ? "▲" : "▼"}</span>
+          </div>
+        </>
+      )}
 
       {isAccordionOpen && (
         <div className="saved-addresses">
-          {addresses?.length > 0 ? (
-            addresses?.map((addr) => (
-              <div
-                key={addr.id}
-                className={`address-card${
-                  isSelectAddress ? " select-address" : ""
-                } ${selectedAddress?.id === addr.id ? " selected" : ""}`}
-                onClick={
-                  isSelectAddress
-                    ? () => handleSelectedAddresses(addr)
-                    : undefined
-                }
-              >
-                <strong className="address-type">{addr.label}</strong>
-                <p>
-                  {addr.street}, {addr.city} - {addr.postal_code}
-                </p>
-                {editable && (
-                  <div className="address-actions">
-                    {/* <Button textOnly>Edit</Button> */}
-                    <Button
-                      type="button"
-                      textOnly
-                      onClick={() => handleDelete(addr.id)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                )}
-              </div>
-            ))
-          ) : (
-            <p>No Saved Addresses Yet!</p>
-          )}
+          {addresses?.length > 0
+            ? addresses?.map((addr) => (
+                <div
+                  key={addr.id}
+                  className={`address-card${
+                    isSelectAddress ? " select-address" : ""
+                  } ${selectedAddress?.id === addr.id ? " selected" : ""}`}
+                  onClick={
+                    isSelectAddress
+                      ? () => handleSelectedAddresses(addr)
+                      : undefined
+                  }
+                >
+                  <strong className="address-type">{addr.label}</strong>
+                  <p>
+                    {addr.street}, {addr.city} - {addr.postal_code}
+                  </p>
+                  {editable && (
+                    <div className="address-actions">
+                      {/* <Button textOnly>Edit</Button> */}
+                      <Button
+                        type="button"
+                        textOnly
+                        onClick={() => handleDelete(addr.id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))
+            : !user?.admin && <p>No Saved Addresses Yet!</p>}
         </div>
       )}
     </div>

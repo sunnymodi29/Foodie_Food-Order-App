@@ -3,11 +3,14 @@ import "../Admin/adminIndex.css";
 import useHttp from "../hooks/useHttp";
 import { useEffect, useState } from "react";
 import SkeletonText from "../components/UI/SkeletonText";
-import { formatDateTime, formatNumberWithK } from "../util/common";
+import { formatDateTime } from "../util/common";
+import { useAuth } from "../store/AuthContext";
 
 const requestConfig = {};
 
 export default function Dashboard() {
+  const { currencyFormatter } = useAuth();
+
   const [dashboardSummary, setDashboardSummary] = useState(null);
 
   const {
@@ -72,7 +75,7 @@ export default function Dashboard() {
                 {isLoading || !dashboardSummary ? (
                   <SkeletonText />
                 ) : (
-                  `$${dashboardSummary.totalRevenue?.toFixed(2)}`
+                  currencyFormatter(parseFloat(dashboardSummary.totalRevenue || 0))
                 )}
               </p>
               <h2 className="card-title">Revenue</h2>
@@ -80,16 +83,6 @@ export default function Dashboard() {
             <DollarSign size={32} />
           </AdminCardContent>
         </AdminCard>
-
-        {/* <AdminCard className="card">
-          <AdminCardContent className="card-content">
-            <div>
-              <p className="card-value">5</p>
-              <h2 className="card-title">Reports</h2>
-            </div>
-            <BarChart3 size={32} />
-          </AdminCardContent>
-        </AdminCard> */}
       </div>
 
       {/* Recent Orders Table */}
@@ -143,7 +136,7 @@ export default function Dashboard() {
                           </span>
                         ))}
                       </td>
-                      <td>${orders.total}</td>
+                      <td>{currencyFormatter(parseFloat(orders.total || 0))}</td>
                       <td
                         className={`status-${
                           orders.order_status

@@ -30,6 +30,16 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/get-currency", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM currency ORDER BY id ASC");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
+});
+
 app.get("/meals", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM meals ORDER BY id ASC");
@@ -206,7 +216,7 @@ app.get("/fetch-orders/:user", async (req, res) => {
 
       return {
         ...order,
-        total: Number(total.toFixed(2)),
+        total: Number(total.toFixed()),
       };
     });
 
@@ -298,8 +308,15 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/editprofile", async (req, res) => {
-  const { user_id, username, email, password, new_password, addresses } =
-    req.body;
+  const {
+    user_id,
+    username,
+    email,
+    password,
+    new_password,
+    addresses,
+    currency_code,
+  } = req.body;
 
   if (!email || !email.includes("@") || !username) {
     return res.status(400).json({ message: "Invalid input." });
@@ -325,15 +342,17 @@ app.post("/editprofile", async (req, res) => {
        SET username = $2,
            email = $3,
            password = $4,
-           addresses = $5
+           addresses = $5,
+           currency_code = $6
        WHERE id = $1
        RETURNING id`,
-      [user_id, username, email, hashedPassword, addresses]
+      [user_id, username, email, hashedPassword, addresses, currency_code]
     );
 
     let response = {
       message: "Profile Edited Successfully!",
       userId: user_id,
+      currency_code: currency_code,
     };
 
     if (new_password && new_password !== password) {
@@ -390,7 +409,7 @@ app.get("/dashboard-summary", async (req, res) => {
         customer_email: order.customer_email,
         created_at: order.created_at,
         order_status: order.order_status,
-        total: Number(total.toFixed(2)),
+        total: Number(total.toFixed()),
         items: order.items,
       };
     });
@@ -400,7 +419,7 @@ app.get("/dashboard-summary", async (req, res) => {
     res.json({
       totalUsers: parseInt(total_users),
       totalOrders: parseInt(total_orders),
-      totalRevenue: Number(totalRevenue.toFixed(2)),
+      totalRevenue: Number(totalRevenue.toFixed()),
       recentOrders,
     });
   } catch (error) {

@@ -5,10 +5,13 @@ import Button from "../../components/UI/Button";
 import Loader from "../../components/Loader";
 import Toastify from "../../components/Toastify";
 import Input from "../../components/UI/Input";
+import { useAuth } from "../../store/AuthContext";
 
 const requestConfig = {};
 
 const Menu = () => {
+  const { currencyFormatter, exchangeRate } = useAuth();
+
   const [meals, setMeals] = useState([]);
   const [updatingMealStock, setUpdatingMealStock] = useState(null);
   const [selectedMeal, setSelectedMeal] = useState(null);
@@ -95,7 +98,16 @@ const Menu = () => {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setSelectedMeal((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "price") {
+      const basePrice = parseFloat(value) / exchangeRate;
+      setSelectedMeal((prev) => ({
+        ...prev,
+        [name]: isNaN(basePrice) ? 0 : basePrice,
+      }));
+    } else {
+      setSelectedMeal((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSaveEdit = async () => {
@@ -154,7 +166,7 @@ const Menu = () => {
   return (
     <div className="menu-container">
       {showLoader && <Loader>Deleting...</Loader>}
-      <h1 class="admin-title">Manage Menu ({meals.length})</h1>
+      <h1 className="admin-title">Manage Menu ({meals.length})</h1>
       <div className="orders-table-container">
         <div className="table-wrapper">
           <table className="orders-table">
@@ -214,7 +226,7 @@ const Menu = () => {
                   <td>
                     <span className="meal_description">{meal.description}</span>
                   </td>
-                  <td>${meal.price}</td>
+                  <td>{currencyFormatter(meal.price)}</td>
                   <td className="table_img">
                     <img
                       src={`https://foodie-food-order-app.onrender.com/${meal.image}`}
@@ -252,7 +264,7 @@ const Menu = () => {
               type="number"
               label="Price:"
               name="price"
-              value={selectedMeal.price}
+              value={(selectedMeal.price * exchangeRate).toFixed()}
               onChange={handleEditChange}
             />
             <Input

@@ -275,7 +275,7 @@ const Menu = () => {
               onChange={handleEditChange}
             />
             <div className="modal-actions">
-              <Button textOnly type="button" className="secondary-button" onClick={closeEditModal}>
+              <Button type="button" className="secondary-button" onClick={closeEditModal}>
                 Cancel
               </Button>
               <Button type="button" onClick={handleSaveEdit}>
@@ -296,6 +296,9 @@ const Menu = () => {
               <strong>{mealToDelete.name}</strong>?
             </p>
             <div className="modal-actions">
+              <Button className="secondary-button" type="button" onClick={closeDeleteModal}>
+                Cancel
+              </Button>
               <Button
                 type="button"
                 onClick={() => {
@@ -304,9 +307,6 @@ const Menu = () => {
                 }}
               >
                 Yes, Delete
-              </Button>
-              <Button textOnly type="button" onClick={closeDeleteModal}>
-                Cancel
               </Button>
             </div>
           </div>

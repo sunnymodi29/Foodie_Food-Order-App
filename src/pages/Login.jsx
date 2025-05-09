@@ -43,10 +43,10 @@ function Login() {
     clearData,
   } = useHttp(url, requestConfig);
 
-  async function handleUserLogin() {
+  async function handleUserLogin(e) {
+    e.preventDefault();
     try {
       await sendRequest(JSON.stringify({ ...userData }));
-      
     } catch (error) {
       Toastify({
         toastType: "error",
@@ -89,7 +89,8 @@ function Login() {
 
           <form
             className="food-login-form"
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleUserLogin}
+            onKeyDown={(event) => event.key === "Enter" && handleUserLogin}
           >
             {!isLoginMode && (
               <Input
@@ -133,7 +134,7 @@ function Login() {
               }
             />
 
-            <Button type="save" onClick={handleUserLogin} disabled={isSending}>
+            <Button type="submit" disabled={isSending}>
               {isSending ? "Please wait..." : isLoginMode ? "Login" : "Sign Up"}
             </Button>
 

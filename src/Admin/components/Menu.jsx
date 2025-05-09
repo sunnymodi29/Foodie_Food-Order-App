@@ -275,11 +275,11 @@ const Menu = () => {
               onChange={handleEditChange}
             />
             <div className="modal-actions">
+              <Button textOnly type="button" className="secondary-button" onClick={closeEditModal}>
+                Cancel
+              </Button>
               <Button type="button" onClick={handleSaveEdit}>
                 {isSending ? "Saving..." : "Save"}
-              </Button>
-              <Button textOnly type="button" onClick={closeEditModal}>
-                Cancel
               </Button>
             </div>
           </form>

@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   useNavigate,
+  Navigate,
 } from "react-router-dom";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
@@ -25,6 +26,7 @@ import AdminLayout from "./Admin/components/AdminLayout/AdminLayout";
 import AdminOrdersPage from "./Admin/AdminOrdersPage";
 import Menu from "./Admin/components/Menu";
 import { useEffect } from "react";
+import NotFound from "./pages/NotFound";
 // import CheckoutPage from "./pages/CheckoutPage";
 
 function AppContent() {
@@ -39,7 +41,7 @@ function AppContent() {
   return (
     <>
       <ScrollToTopButton />
-      {user && <Header />}
+      {user && location.pathname !== "/404" && <Header />}
       <Cart />
       <Checkout />
       <Routes>
@@ -102,6 +104,9 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/404" replace />} />
         {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
       </Routes>
     </>

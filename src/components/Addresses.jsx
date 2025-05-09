@@ -98,7 +98,7 @@ const Addresses = ({
           <Button type="submit" className="w-100" onClick={handleAddAddress}>
             Save Address
           </Button>
-          <Button textOnly onClick={handleCancelAddress}>
+          <Button className="secondary-button w-100" onClick={handleCancelAddress}>
             Cancel
           </Button>
         </div>

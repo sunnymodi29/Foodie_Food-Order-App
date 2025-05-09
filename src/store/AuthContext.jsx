@@ -86,8 +86,8 @@ export const AuthProvider = ({ children }) => {
       let formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: currency || "USD", // Ensure we always have a valid currency code
-        maximumFractionDigits: 2,
-      }).format(convertedAmount.toFixed());
+        maximumFractionDigits: 0,
+      }).format(convertedAmount);
 
       // If the value is over 10,000, convert to K format
       if (convertedAmount >= 10000) {

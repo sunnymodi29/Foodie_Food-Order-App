@@ -47,7 +47,7 @@ const Cart = () => {
       </ul>
       <p className="cart-total">{currencyFormatter(cartTotal)}</p>
       <p className="modal-actions">
-        <Button textOnly onClick={handleCloseCart}>
+        <Button className="secondary-button" onClick={handleCloseCart}>
           Close
         </Button>
         {cartCtx.items.length > 0 && (

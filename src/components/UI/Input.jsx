@@ -1,4 +1,6 @@
-const Input = ({ label, id, isTextarea = false, type, ...props }) => {
+import AskAI from "./AskAI";
+
+const Input = ({ label, id, isTextarea = false, type, askAI, ...props }) => {
   const handleKeyDown = (e) => {
     if (e.key === "-" || e.key === "." || e.key === "e") {
       e.preventDefault();
@@ -23,6 +25,13 @@ const Input = ({ label, id, isTextarea = false, type, ...props }) => {
         />
       ) : (
         <input type={type} id={id} name={id} required {...props} />
+      )}
+      {askAI === "true" && (
+        <div className="ask-ai-wrapper">
+          <AskAI>
+            <button>🚀Ask AI</button>
+          </AskAI>
+        </div>
       )}
     </p>
   );

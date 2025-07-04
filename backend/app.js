@@ -452,6 +452,145 @@ app.post("/add-meal", async (req, res) => {
   }
 });
 
+// Ask AI API
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+
+// app.post("/ask-ai", async (req, res) => {
+//   const { question } = req.body;
+
+//   console.log(question);
+
+//   if (!question) {
+//     return res.status(400).json({ error: "Question is required." });
+//   }
+
+//   try {
+//     const response = await fetch(GROQ_API_URL, {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         model: "llama3-8b-8192",
+//         messages: [
+//           { role: "system", content: "You are a helpful assistant." },
+//           { role: "user", content: question },
+//         ],
+//       }),
+//     });
+
+//     const data = await response.json();
+
+//     if (!response.ok) {
+//       console.error("Groq error response:", data);
+//       return res
+//         .status(500)
+//         .json({ error: data.error?.message || "Unknown error from Groq" });
+//     }
+
+//     console.log("Groq response status:", response.status);
+//     console.log("Groq response data:", data);
+
+//     res.json({ answer: data.choices[0].message.content });
+//   } catch (error) {
+//     console.error("Server error:", error);
+//     res.status(500).json({ error: "Failed to connect to Groq API" });
+//   }
+// });
+
+// app.post("/ask-ai", async (req, res) => {
+//   const { question } = req.body;
+
+//   try {
+//     const response = await fetch(GROQ_API_URL, {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         model: "llama3-70b-8192",
+//         messages: [
+//           {
+//             role: "system",
+//             content: "You are a helpful assistant that always responds with JSON.",
+//           },
+//           {
+//             role: "user",
+//             content: `Give a short one-sentence description for the following meal in this format: {"description": "<your one-sentence response>"}\n\nMeal: ${question}`
+//           }
+//         ],
+//       }),
+//     });
+
+//     const data = await response.json();
+
+//     if (!response.ok) {
+//       console.error("Groq error response:", data);
+//       return res.status(500).json({ error: data.error?.message || "Unknown error" });
+//     }
+
+//     res.json({ answer: data.choices[0].message.content });
+//   } catch (error) {
+//     console.error("Server error:", error);
+//     res.status(500).json({ error: "Failed to connect to Groq API" });
+//   }
+// });
+
+app.post("/ask-ai", async (req, res) => {
+  const { question } = req.body;
+
+  try {
+    const response = await fetch(GROQ_API_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "llama3-70b-8192",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a strict JSON API. Respond ONLY with valid JSON. No explanations, no extra text.",
+          },
+          {
+            role: "user",
+            content: `Give a one-sentence description for this meal in JSON:\n\n{"description": "..." }\n\nMeal: ${question}`,
+          },
+        ],
+      }),
+    });
+
+    const data = await response.json();
+    const rawAnswer = data.choices[0].message.content.trim();
+
+    // Try to parse JSON response
+    try {
+      const parsed = JSON.parse(rawAnswer);
+      return res.json({ answer: parsed });
+    } catch (err) {
+      // Optional regex fallback
+      const match = rawAnswer.match(/\{[^}]+\}/);
+      if (match) {
+        try {
+          const parsed = JSON.parse(match[0]);
+          return res.json({ answer: parsed });
+        } catch (e) {}
+      }
+      console.error("Groq did not return valid JSON:", rawAnswer);
+      return res
+        .status(500)
+        .json({ error: "Invalid JSON from Groq", raw: rawAnswer });
+    }
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Failed to connect to Groq API" });
+  }
+});
+
 app.use((req, res) => {
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);

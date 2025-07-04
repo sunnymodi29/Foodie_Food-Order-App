@@ -1,3 +1,11 @@
+.position-relative {
+  position: relative;
+}
+
+.position-absolute {
+  position: absolute;
+}
+
 #admin-main-header {
   padding: 2rem 1.5rem;
   display: flex;
@@ -265,6 +273,38 @@
 
 .admin-main .date-filter {
   margin: 0;
+}
+
+.description-wrapper {
+  /* position: relative; */
+}
+
+.description-wrapper .control {
+  position: relative;
+}
+
+.ask-ai-wrapper {
+  margin-top: 10px;
+  display: flex;
+  justify-content: end;
+}
+
+.ask-ai-wrapper button {
+  width: 100px;
+  height: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--themeTextColor);
+  margin: 0 !important;
+  font-size: 13px;
+  line-height: 28px;
+  padding: 0px 15px;
+  cursor: pointer;
+  border: 1px solid var(--themeTextColor);
+  border-radius: 50px;
+  transition: all 0.3s ease-in-out;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 

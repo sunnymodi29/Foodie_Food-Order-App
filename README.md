@@ -4,7 +4,7 @@ A full-stack food ordering web application built with **React** (frontend), **Ex
 
 ## 🌐 Live Demo
 
-[🔗 Visit the App](https://foodie-food-order-app.vercel.app)
+[🔗 Visit the App - Foodie - Food Order App](https://foodie-food-order-app.vercel.app)
 
 ---
 

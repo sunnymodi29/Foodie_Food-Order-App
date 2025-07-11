@@ -39,6 +39,7 @@ A full-stack food ordering web application built with **React** (frontend), **Ex
 - 🧾 Order history and tracking
 - 👤 Profile management with address storage
 - ⚙️ Admin panel for adding/updating food items
+- 🧠 **AI-powered meal description generation** (for admin users)
 
 ---
 

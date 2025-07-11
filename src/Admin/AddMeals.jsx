@@ -104,33 +104,6 @@ export default function AddMeals() {
     }
   };
 
-  // const handleAsk = async () => {
-  //   if (!question.trim()) return;
-  //   setLoading(true);
-  //   setResponse("");
-
-  //   try {
-  //     const res = await fetch("http://localhost:3000/ask-ai", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ question }),
-  //     });
-
-  //     const data = await res.json();
-  //     console.log(data);
-  //     const parsed = JSON.parse(data.answer);
-  //     setResponse(parsed || "No response.");
-  //     // setResponse(data.answer || "No response.");
-  //   } catch (error) {
-  //     console.error("Fetch error:", error);
-  //     // setResponse("Error fetching response.");
-  //   }
-
-  //   setLoading(false);
-  // };
-
   const handleAsk = async () => {
     if (!question.trim()) return;
 
@@ -138,13 +111,16 @@ export default function AddMeals() {
     setResponse("");
 
     try {
-      const res = await fetch("http://localhost:3000/ask-ai", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ question }),
-      });
+      const res = await fetch(
+        "https://foodie-food-order-app.onrender.com/ask-ai",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ question }),
+        }
+      );
 
       const data = await res.json();
 

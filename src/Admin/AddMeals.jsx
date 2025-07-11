@@ -61,7 +61,7 @@ export default function AddMeals() {
 
       // Reset response when description is cleared
       if (!value) {
-        setResponse(null); // or setResponse('') depending on your initial response state
+        setResponse(""); // or setResponse('') depending on your initial response state
       }
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -132,13 +132,22 @@ export default function AddMeals() {
         // setResponse(
         //   data.raw.replace(/\\|["'\[\]{}\n\r]|description\s*:\s*/gi, "").trim()
         // );
-        setResponse("Something went wrong in sever. Please try again!");
+        Toastify({
+          toastType: "error",
+          message: "Something went wrong in server. Please try again!",
+        });
       } else {
-        setResponse("No valid description found.");
+        Toastify({
+          toastType: "error",
+          message: "No valid description found. Please try again!",
+        });
       }
     } catch (error) {
       console.error("Fetch error:", error);
-      setResponse("Error getting description.");
+      Toastify({
+          toastType: "error",
+          message: "Error getting description. Please try again!",
+        });
     }
 
     setLoading(false);

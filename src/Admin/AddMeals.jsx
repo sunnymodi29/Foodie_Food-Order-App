@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Toastify from "../components/Toastify";
 import Input from "../components/UI/Input";
@@ -7,6 +7,7 @@ import useHttp from "../hooks/useHttp";
 import Loader from "../components/Loader";
 import AskAI from "../components/UI/AskAI";
 import { CircleArrowRight, X } from "lucide-react";
+import { is } from "date-fns/locale";
 
 const requestConfig = {
   method: "POST",
@@ -44,6 +45,41 @@ export default function AddMeals() {
   const aiTextarea = useRef(null);
 
   const navigate = useNavigate();
+
+  // Toggle AI popup visibility with Ctrl+Shift+A
+  useEffect(() => {
+    const handleKeydown = (e) => {
+      const isCtrlOrCmd = e.ctrlKey || e.metaKey; // ctrl on Win/Linux, cmd on macOS
+
+      if (isCtrlOrCmd && e.shiftKey && e.key.toLowerCase() === "a") {
+        e.preventDefault();
+        setShowAIPopup((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeydown);
+    return () => window.removeEventListener("keydown", handleKeydown);
+  }, []);
+
+  // Dynamically set the tooltip content based on the platform
+  useEffect(() => {
+    let isMac = false;
+
+    if (navigator.userAgentData) {
+      // Check if the user agent data is available (modern browsers)
+      isMac = navigator.userAgentData.platform.toLowerCase().includes("mac");
+    } else {
+      // If not, fallback to the user agent string
+      isMac = navigator.userAgent.toLowerCase().includes("mac");
+    }
+
+    const platformUsingKey = isMac ? "Cmd" : "Ctrl";
+
+    const btn = document.querySelector(".ask-ai-wrapper button");
+    if (btn) {
+      btn.setAttribute("data-platform", platformUsingKey);
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -145,9 +181,9 @@ export default function AddMeals() {
     } catch (error) {
       console.error("Fetch error:", error);
       Toastify({
-          toastType: "error",
-          message: "Error getting description. Please try again!",
-        });
+        toastType: "error",
+        message: "Error getting description. Please try again!",
+      });
     }
 
     setLoading(false);
@@ -236,19 +272,19 @@ export default function AddMeals() {
                   rows={1}
                   cols={50}
                   className="ai-question-input"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      if (!loading && question.trim()) {
+                        handleAsk();
+                      }
+                    }
+                  }}
                 />
                 <div className="ai-actions-button">
                   <button
                     type="button"
                     onClick={handleAsk}
-                    onKeyUp={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        if (!loading && question.trim()) {
-                          handleAsk();
-                        }
-                      }
-                    }}
                     disabled={loading || !question.trim()}
                     className="ask-ai-button"
                   >

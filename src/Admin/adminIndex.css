@@ -342,7 +342,35 @@
   border-radius: 50px;
   transition: all 0.3s ease-in-out;
   z-index: 1;
+  position: relative;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Tooltip content */
+.ask-ai-wrapper button::before {
+  content: 'Use AI to auto-generate a meal description ' attr(data-platform) '+Shift+A';
+  position: absolute;
+  bottom: 120%;
+  /* show above the button */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 1000;
+  visibility: hidden;
+}
+
+/* Show tooltip on hover */
+.ask-ai-wrapper button:hover::before {
+  opacity: 1;
+  visibility: visible;
 }
 
 .popup-container {
@@ -385,7 +413,8 @@
   gap: 8px;
 }
 
-.ask-ai-button, .close-popup-button{
+.ask-ai-button,
+.close-popup-button {
   background: none;
   border: none;
   outline: none;
@@ -431,6 +460,10 @@
 
   .add-meal-container {
     margin: 3rem 24px;
+  }
+
+  .ask-ai-wrapper button::before {
+    display: none !important;
   }
 }
 

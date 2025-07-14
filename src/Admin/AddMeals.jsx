@@ -46,6 +46,8 @@ export default function AddMeals() {
 
   const navigate = useNavigate();
 
+  const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1MB
+
   // Toggle AI popup visibility with Ctrl+Shift+A
   useEffect(() => {
     const handleKeydown = (e) => {
@@ -84,7 +86,22 @@ export default function AddMeals() {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image") {
-      setFormData((prev) => ({ ...prev, image: files[0] }));
+      const file = files[0];
+      if (file) {
+        if (file.size > MAX_IMAGE_SIZE) {
+          e.target.value = "";
+          Toastify({
+            toastType: "error",
+            message: "Image is too large! Please select an image under 1MB.",
+          });
+          return;
+        }
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFormData((prev) => ({ ...prev, image: reader.result })); // base64 string
+        };
+        reader.readAsDataURL(file);
+      }
     } else if (name === "description") {
       setFormData((prev) => ({ ...prev, [name]: value }));
 
@@ -115,13 +132,9 @@ export default function AddMeals() {
       return;
     }
 
-    const formMealData = new FormData(event.target);
-    const mealData = Object.fromEntries(formMealData.entries());
-
-    mealData.image = `images/${mealData.image.name}`;
-
+    // Send formData directly, including base64 image
     try {
-      const response = await sendRequest(JSON.stringify(mealData));
+      const response = await sendRequest(JSON.stringify(formData));
 
       {
         response &&
@@ -164,6 +177,10 @@ export default function AddMeals() {
         setShowAIPopup(false); // Hide AI popup after getting response
         setShowAIButton(false); // Hide AI button when asking a question
         setResponse(data.answer.description);
+        setFormData((prev) => ({
+          ...prev,
+          description: data.answer.description,
+        }));
       } else if (data.raw) {
         // setResponse(
         //   data.raw.replace(/\\|["'\[\]{}\n\r]|description\s*:\s*/gi, "").trim()

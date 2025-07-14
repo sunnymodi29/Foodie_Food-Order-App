@@ -21,14 +21,16 @@ const MealItem = ({ meal, customerData, type }) => {
     <li className="meal-item">
       <article>
         <img
-          src={`https://foodie-food-order-app.onrender.com/${meal.image}`}
+          src={
+            meal.image.startsWith("images/")
+              ? `https://foodie-food-order-app.onrender.com/${meal.image}`
+              : meal.image
+          }
           alt={meal.name}
         />
         <div>
           <h3>{meal.name}</h3>
-          <p className="meal-item-price">
-            {currencyFormatter(meal.price)}
-          </p>
+          <p className="meal-item-price">{currencyFormatter(meal.price)}</p>
           <p className="meal-item-description">{meal.description}</p>
         </div>
         {type !== "orders" && (

@@ -229,7 +229,11 @@ const Menu = () => {
                   <td>{currencyFormatter(meal.price)}</td>
                   <td className="table_img">
                     <img
-                      src={`https://foodie-food-order-app.onrender.com/${meal.image}`}
+                      src={
+                        meal.image.startsWith("images/")
+                          ? `https://foodie-food-order-app.onrender.com/${meal.image}`
+                          : meal.image
+                      }
                       alt={meal.name}
                     />
                   </td>
@@ -275,7 +279,11 @@ const Menu = () => {
               onChange={handleEditChange}
             />
             <div className="modal-actions">
-              <Button type="button" className="secondary-button" onClick={closeEditModal}>
+              <Button
+                type="button"
+                className="secondary-button"
+                onClick={closeEditModal}
+              >
                 Cancel
               </Button>
               <Button type="button" onClick={handleSaveEdit}>
@@ -296,7 +304,11 @@ const Menu = () => {
               <strong>{mealToDelete.name}</strong>?
             </p>
             <div className="modal-actions">
-              <Button className="secondary-button" type="button" onClick={closeDeleteModal}>
+              <Button
+                className="secondary-button"
+                type="button"
+                onClick={closeDeleteModal}
+              >
                 Cancel
               </Button>
               <Button

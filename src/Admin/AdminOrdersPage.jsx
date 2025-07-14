@@ -97,7 +97,7 @@ const AdminOrdersPage = () => {
       );
     } catch (err) {
       console.error(err);
-      alert("Failed to update order status");
+      // alert("Failed to update order status");
     } finally {
       setTimeout(() => {
         setUpdatingOrderId(null);

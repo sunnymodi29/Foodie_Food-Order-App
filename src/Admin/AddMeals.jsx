@@ -196,7 +196,6 @@ export default function AddMeals() {
         });
       }
     } catch (error) {
-      console.error("Fetch error:", error);
       Toastify({
         toastType: "error",
         message: "Error getting description. Please try again!",

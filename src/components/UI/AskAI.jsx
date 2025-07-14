@@ -1,9 +1,4 @@
-const AskAI = ({ children, openAIModal }) => {
-  function openAIModal() {
-    console.log("hello");
-    
-  }
-
+const AskAI = ({ children }) => {
   return <>{children}</>;
 };
 

@@ -95,8 +95,6 @@ const Profile = () => {
       password,
     };
 
-    console.log(updatedProfileJSON);
-
     const response = await sendRequest(JSON.stringify(updatedProfileJSON));
     setPasswordChangedState(response);
 

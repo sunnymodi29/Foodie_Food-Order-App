@@ -1,5 +1,5 @@
 import useHttp from "../../hooks/useHttp";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Modal from "../../components/UI/Modal";
 import Button from "../../components/UI/Button";
 import Loader from "../../components/Loader";
@@ -22,6 +22,7 @@ const Menu = () => {
     edit: false,
     delete: false,
   });
+  const [imageError, setImageError] = useState(false);
 
   const {
     data: fetchedMeals,
@@ -32,6 +33,10 @@ const Menu = () => {
     requestConfig,
     []
   );
+
+  const fileInputRef = useRef();
+
+  const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1MB
 
   useEffect(() => {
     if (fetchedMeals?.length) setMeals(fetchedMeals);
@@ -64,8 +69,7 @@ const Menu = () => {
       );
       showToast("Stock Updated!!");
     } catch (err) {
-      console.error(err);
-      alert("Error updating stock status.");
+      showToast("Error updating stock status.", "error");
     } finally {
       setUpdatingMealStock(null);
     }
@@ -110,6 +114,25 @@ const Menu = () => {
     }
   };
 
+  const handleEditImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > MAX_IMAGE_SIZE) {
+        e.target.value = "";
+        setImageError(true);
+        setTimeout(() => {
+          setImageError(false);
+        }, 2000);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedMeal((prev) => ({ ...prev, image: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSaveEdit = async () => {
     try {
       setIsSending(true);
@@ -130,8 +153,7 @@ const Menu = () => {
       showToast("Meal Edited Successfully!!");
       closeEditModal();
     } catch (err) {
-      console.error(err);
-      alert("Failed to update meal.");
+      showToast("Failed to update meal.", "error");
     } finally {
       setIsSending(false);
     }
@@ -154,8 +176,7 @@ const Menu = () => {
       setMeals((prev) => prev.filter((meal) => meal.id !== mealId));
       showToast("Meal Delete Successfully!!");
     } catch (err) {
-      console.error(err);
-      alert("Failed to delete meal.");
+      showToast("Failed to delete meal.", "error");
     } finally {
       setShowLoader(false);
     }
@@ -278,6 +299,37 @@ const Menu = () => {
               value={selectedMeal.category || ""}
               onChange={handleEditChange}
             />
+            <div className="image-preview-wrapper">
+              <label>Image:</label>
+              <img
+                src={
+                  selectedMeal.image.startsWith("images/")
+                    ? `https://foodie-food-order-app.onrender.com/${selectedMeal.image}`
+                    : selectedMeal.image
+                }
+                alt={selectedMeal.name}
+                className="modal-img"
+              />
+              <button
+                type="button"
+                className="change-image"
+                onClick={() => fileInputRef.current.click()}
+              >
+                Change Image
+              </button>
+              <Input
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                ref={fileInputRef}
+                onChange={handleEditImageChange}
+              />
+            </div>
+            {imageError && (
+              <span className="image-error-wrapper errorText">
+                Image is too large! Please select an image under 1MB.
+              </span>
+            )}
             <div className="modal-actions">
               <Button
                 type="button"

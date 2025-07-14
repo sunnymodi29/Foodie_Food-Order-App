@@ -26,7 +26,6 @@ export default function Dashboard() {
   useEffect(() => {
     if (dashboardData) {
       setDashboardSummary(dashboardData);
-      console.log(dashboardSummary);
     }
   }, [dashboardData]);
 
@@ -75,7 +74,9 @@ export default function Dashboard() {
                 {isLoading || !dashboardSummary ? (
                   <SkeletonText />
                 ) : (
-                  currencyFormatter(parseFloat(dashboardSummary.totalRevenue || 0))
+                  currencyFormatter(
+                    parseFloat(dashboardSummary.totalRevenue || 0)
+                  )
                 )}
               </p>
               <h2 className="card-title">Revenue</h2>
@@ -136,7 +137,9 @@ export default function Dashboard() {
                           </span>
                         ))}
                       </td>
-                      <td>{currencyFormatter(parseFloat(orders.total || 0))}</td>
+                      <td>
+                        {currencyFormatter(parseFloat(orders.total || 0))}
+                      </td>
                       <td
                         className={`status-${
                           orders.order_status

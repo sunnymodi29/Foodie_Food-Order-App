@@ -248,12 +248,12 @@
   height: 100%;
   max-width: 50px;
   max-height: 50px;
+  border-radius: 8px;
 }
 
 .edit-meal-form {
   display: flex;
   flex-direction: column;
-  min-width: 300px;
 }
 
 .modal-img {
@@ -261,6 +261,7 @@
   height: 100%;
   max-width: 104px;
   max-height: 104px;
+  border-radius: 8px 8px 0 0;
 }
 
 .image-preview-wrapper {

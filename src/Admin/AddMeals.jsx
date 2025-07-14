@@ -333,7 +333,7 @@ export default function AddMeals() {
           required
         />
 
-        <label>Select Meal Category:</label>
+        {/* <label>Select Meal Category:</label>
         <select
           name="category"
           value={formData.category}
@@ -346,7 +346,7 @@ export default function AddMeals() {
           <option value="noodles">Noodles</option>
           <option value="dessert">Dessert</option>
           <option value="drinks">Drinks</option>
-        </select>
+        </select> */}
 
         <Input
           label="Select Meal Image:"

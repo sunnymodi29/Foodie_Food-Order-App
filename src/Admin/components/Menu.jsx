@@ -200,7 +200,7 @@ const Menu = () => {
                 <th>Meal Description</th>
                 <th>Price</th>
                 <th>Image</th>
-                <th>Category</th>
+                {/* <th>Category</th> */}
               </tr>
             </thead>
             <tbody>
@@ -258,7 +258,7 @@ const Menu = () => {
                       alt={meal.name}
                     />
                   </td>
-                  <td>{meal.category || "-"}</td>
+                  {/* <td>{meal.category || "-"}</td> */}
                 </tr>
               ))}
             </tbody>
@@ -292,13 +292,13 @@ const Menu = () => {
               value={(selectedMeal.price * exchangeRate).toFixed()}
               onChange={handleEditChange}
             />
-            <Input
+            {/* <Input
               type="text"
               label="Category:"
               name="category"
               value={selectedMeal.category || ""}
               onChange={handleEditChange}
-            />
+            /> */}
             <div className="image-preview-wrapper">
               <label>Image:</label>
               <img

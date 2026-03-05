@@ -7,17 +7,41 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import dns from "dns";
+import net from "net";
 dns.setDefaultResultOrder("ipv4first");
 import nodemailer from "nodemailer";
+
+dns.lookup("smtp-relay.brevo.com", (err, address, family) => {
+  if (err) {
+    console.error("DNS lookup failed:", err);
+  } else {
+    console.log(`DNS resolved: ${address} (IPv${family})`);
+
+    const socket = net.createConnection(465, address);
+
+    socket.on("connect", () => {
+      console.log("TCP connection to SMTP server successful");
+      socket.end();
+    });
+
+    socket.on("error", (err) => {
+      console.error("TCP connection failed:", err);
+    });
+  }
+});
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
   secure: true,
+  family: 4,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  socketTimeout: 20000,
 });
 
 transporter.verify((err, success) => {

@@ -27,6 +27,8 @@ import AdminOrdersPage from "./Admin/AdminOrdersPage";
 import Menu from "./Admin/components/Menu";
 import { useEffect } from "react";
 import NotFound from "./pages/NotFound";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 // import CheckoutPage from "./pages/CheckoutPage";
 
 function AppContent() {
@@ -47,6 +49,8 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         {user?.admin ? (
           <Route
             path="/admin/orders"

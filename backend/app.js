@@ -7,6 +7,8 @@ import express from "express";
 import pkg from "pg";
 import cors from "cors";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 
 const { Pool } = pkg;
 
@@ -304,6 +306,97 @@ app.post("/login", async (req, res) => {
   } catch (error) {
     console.error("Database error:", error);
     res.status(500).json({ message: "Database error." });
+  }
+});
+
+// Forgot Password API
+app.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await pool.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email]
+    );
+
+    if (user.rows.length === 0) {
+      return res.json({
+        message: "If this email exists, a reset link was sent"
+      });
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+
+    await pool.query(
+      `UPDATE users 
+       SET reset_token=$1,
+       reset_token_expiry=NOW() + INTERVAL '15 minutes'
+       WHERE email=$2`,
+      [token, email]
+    );
+
+    const resetLink =
+      `${process.env.FRONTEND_URL}/reset-password/${token}`;
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Reset Password",
+      html: `<p>Click here to reset password:</p>
+             <a href="${resetLink}">${resetLink}</a>`
+    });
+
+    res.json({
+      message: "If this email exists, a reset link was sent"
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Reset Password API
+app.post("/reset-password/:token", async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const user = await pool.query(
+      `SELECT * FROM users
+       WHERE reset_token=$1
+       AND reset_token_expiry > NOW()`,
+      [token]
+    );
+
+    if (user.rows.length === 0) {
+      return res.status(400).json({ error: "Invalid or expired token" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await pool.query(
+      `UPDATE users
+       SET password=$1,
+       reset_token=NULL,
+       reset_token_expiry=NULL
+       WHERE reset_token=$2`,
+      [hashedPassword, token]
+    );
+
+    res.json({ message: "Password updated successfully" });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 

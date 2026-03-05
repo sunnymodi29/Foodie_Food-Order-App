@@ -1,27 +1,37 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [currency, setCurrency] = useState(
-    localStorage.getItem("currency") || "USD"
+    localStorage.getItem("currency") || "USD",
   );
   const [loading, setLoading] = useState(true);
   const [exchangeRate, setExchangeRate] = useState(1);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
+
+    const publicRoutes = ["/login", "/forgot-password", "/reset-password"];
+
     if (storedUser) {
       setUser(JSON.parse(storedUser));
       fetchExchangeRate(currency);
     } else {
-      navigate("/login");
+      const isPublicRoute = publicRoutes.some((route) =>
+        location.pathname.startsWith(route),
+      );
+
+      if (!isPublicRoute) {
+        navigate("/login");
+      }
     }
     setLoading(false);
-  }, [currency]);
+  }, [currency, location.pathname]);
 
   const fetchExchangeRate = async (currency) => {
     try {
@@ -32,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const response = await fetch(
-        `https://api.exchangerate-api.com/v4/latest/USD`
+        `https://api.exchangerate-api.com/v4/latest/USD`,
       );
       const data = await response.json();
 
@@ -111,7 +121,7 @@ export const AuthProvider = ({ children }) => {
         "Currency formatting error:",
         error,
         "Using currency:",
-        currency
+        currency,
       );
       // Fallback to USD if there's an error
       return new Intl.NumberFormat("en-US", {

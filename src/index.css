@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Lato:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Lato:wght@400;700&display=swap");
 
 * {
   box-sizing: border-box;
@@ -102,7 +102,6 @@ input::file-selector-button:hover {
   background-color: #ffab04;
 }
 
-
 @media only screen and (max-width: 480px) {
   .Toastify__toast {
     --toastify-toast-width: auto;
@@ -118,10 +117,9 @@ input::file-selector-button:hover {
   }
 }
 
-
 body {
   margin: 0;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* background: linear-gradient(#29251c, #2c2306); */
@@ -132,7 +130,7 @@ body {
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #29251c;
 }
 
@@ -141,7 +139,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+  background: url("https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1950&q=80")
+    no-repeat center center/cover;
   position: relative;
 }
 
@@ -187,12 +186,15 @@ body {
   display: flex;
   flex-direction: column;
   margin-top: 1.5rem;
-  gap: 1rem;
 }
 
 .food-login-form .control,
 .food-login-form .control label {
   margin: 0;
+}
+
+.food-login-form .control label {
+  display: none;
 }
 
 .food-login-form input {
@@ -202,10 +204,44 @@ body {
   color: #f3f1e6;
   border: 1px solid #5a5341;
   border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.food-login-form input[type="password"] {
+  margin-bottom: 0.5rem;
 }
 
 .food-login-form input::placeholder {
   color: #a49785;
+}
+
+.food-login-form .forgot-password {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #ffab04;
+  text-align: right;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+}
+
+.food-login-form .forgot-password:hover {
+  text-decoration: underline;
+}
+
+.forgot-password-container, .reset-password-container {
+  max-width: 400px;
+  margin: 100px auto;
+  text-align: center;
+}
+
+.forgot-password-form, .reset-password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.forgot-password-form label, .reset-password-form label {
+  display: none;
 }
 
 .food-btn {
@@ -311,7 +347,6 @@ body {
   }
 }
 
-
 #main-header {
   display: flex;
   justify-content: space-between;
@@ -342,7 +377,7 @@ body {
 
 #main-header button {
   font-size: 1.5rem;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   padding: 0;
   margin: 0 6px;
 }
@@ -366,7 +401,7 @@ body {
 }
 
 h1 {
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   font-weight: 700;
   font-size: 2rem;
   margin: 0;
@@ -661,7 +696,9 @@ h1 {
   font-size: 1rem;
   color: #fefae0;
   cursor: pointer;
-  transition: background-color 0.2s ease, padding-left 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    padding-left 0.2s ease;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -684,7 +721,6 @@ h1 {
     transform: translateY(0);
   }
 }
-
 
 :root {
   --primary-bg: #29251c;
@@ -793,7 +829,6 @@ h1 {
   font-size: 0.95rem;
 }
 
-
 .orders-nav {
   display: flex;
   justify-content: flex-start;
@@ -831,7 +866,6 @@ h1 {
   font-size: 0.875rem;
   color: #b0a998;
 }
-
 
 .home-icon {
   font-size: 1.2rem;
@@ -1000,7 +1034,7 @@ textarea {
   background-color: transparent;
   color: white;
   font-size: inherit;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 textarea {
@@ -1341,7 +1375,6 @@ textarea {
   text-align: center;
 }
 
-
 /* Container for the dropdown */
 .dropdown-container {
   position: relative;
@@ -1493,7 +1526,9 @@ textarea {
   padding: 0.65rem 1.5rem;
   border-radius: 8px;
   text-decoration: none;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
   cursor: pointer;
 }
 

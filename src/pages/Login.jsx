@@ -6,6 +6,7 @@ import { useAuth } from "../store/AuthContext";
 import logoImg from "../assets/logo-transparent.png";
 import Toastify from "../components/Toastify";
 import Loader from "../components/Loader";
+import { useNavigate } from "react-router-dom";
 
 const requestConfig = {
   method: "POST",
@@ -16,6 +17,7 @@ const requestConfig = {
 
 function Login() {
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const [isLoginMode, setIsLoginMode] = useState(true);
   const intialUserData = {
@@ -107,8 +109,10 @@ function Login() {
               />
             )}
             <Input
+              label="Email"
               type="email"
               placeholder="Email"
+              name="email"
               required
               value={
                 JSON.parse(localStorage.getItem("user"))?.email ||
@@ -122,8 +126,10 @@ function Login() {
               }
             />
             <Input
+              label="Password"
               type="password"
               placeholder="Password"
+              name="password"
               required
               value={userData.password}
               onChange={(e) =>
@@ -133,6 +139,10 @@ function Login() {
                 }))
               }
             />
+
+            <p className="control">
+              <span className="forgot-password" onClick={() => navigate("/forgot-password")}>Forgot Password?</span>
+            </p>
 
             <Button type="submit" disabled={isSending}>
               {isSending ? "Please wait..." : isLoginMode ? "Login" : "Sign Up"}

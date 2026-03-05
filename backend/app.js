@@ -9,6 +9,7 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import { sendResetEmail } from "./email.js";
 
 const { Pool } = pkg;
 
@@ -64,7 +65,7 @@ app.patch("/edit-meal", async (req, res) => {
       `UPDATE meals 
        SET name = $1, description = $2, price = $3, category = $4, image = $5
        WHERE id = $6 RETURNING *`,
-      [name, description, price, category || null, image, id]
+      [name, description, price, category || null, image, id],
     );
 
     if (result.rowCount === 0) {
@@ -90,7 +91,7 @@ app.patch("/update-meal-stock", async (req, res) => {
   try {
     const result = await pool.query(
       `UPDATE meals SET "inStock" = $1 WHERE id = $2 RETURNING *`,
-      [inStock, mealId]
+      [inStock, mealId],
     );
 
     if (result.rowCount === 0) {
@@ -116,7 +117,7 @@ app.delete("/delete-meal", async (req, res) => {
   try {
     const result = await pool.query(
       `DELETE FROM meals WHERE id = $1 RETURNING *`,
-      [id]
+      [id],
     );
 
     if (result.rowCount === 0) {
@@ -175,7 +176,7 @@ app.post("/orders", async (req, res) => {
         postalCode,
         JSON.stringify(orderData.items), // Store items as JSON
         orderData.user_id,
-      ]
+      ],
     );
 
     res
@@ -198,7 +199,7 @@ app.get("/fetch-orders/:user", async (req, res) => {
     let result;
     if (isAdminUser.rows[0].admin) {
       result = await pool.query(
-        "SELECT * FROM orders ORDER BY created_at DESC"
+        "SELECT * FROM orders ORDER BY created_at DESC",
       );
     } else {
       result = await pool.query("SELECT * FROM orders WHERE user_id = $1", [
@@ -262,7 +263,7 @@ app.post("/signup", async (req, res) => {
     const result = await pool.query(
       `INSERT INTO users (username, email, password) 
        VALUES ($1, $2, $3) RETURNING id`,
-      [username, email, hashedPassword]
+      [username, email, hashedPassword],
     );
 
     res.status(201).json({
@@ -314,53 +315,32 @@ app.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
 
   try {
-    const user = await pool.query(
-      "SELECT * FROM users WHERE email = $1",
-      [email]
-    );
+    const user = await pool.query("SELECT * FROM users WHERE email=$1", [
+      email,
+    ]);
 
     if (user.rows.length === 0) {
       return res.json({
-        message: "If this email exists, a reset link was sent"
+        message: "If email exists, reset link sent",
       });
     }
 
     const token = crypto.randomBytes(32).toString("hex");
 
     await pool.query(
-      `UPDATE users 
+      `UPDATE users
        SET reset_token=$1,
-       reset_token_expiry=NOW() + INTERVAL '15 minutes'
+           reset_token_expiry=NOW() + INTERVAL '15 minutes'
        WHERE email=$2`,
-      [token, email]
+      [token, email],
     );
 
-    const resetLink =
-      `${process.env.FRONTEND_URL}/reset-password/${token}`;
+    await sendResetEmail(email, token);
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASS
-      }
-    });
-
-    await transporter.sendMail({
-      from: process.env.EMAIL,
-      to: email,
-      subject: "Reset Password",
-      html: `<p>Click here to reset password:</p>
-             <a href="${resetLink}">${resetLink}</a>`
-    });
-
-    res.json({
-      message: "If this email exists, a reset link was sent"
-    });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res.json({ message: "Reset link sent successfully!" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong! Please try again." });
   }
 });
 
@@ -374,7 +354,7 @@ app.post("/reset-password/:token", async (req, res) => {
       `SELECT * FROM users
        WHERE reset_token=$1
        AND reset_token_expiry > NOW()`,
-      [token]
+      [token],
     );
 
     if (user.rows.length === 0) {
@@ -389,11 +369,10 @@ app.post("/reset-password/:token", async (req, res) => {
        reset_token=NULL,
        reset_token_expiry=NULL
        WHERE reset_token=$2`,
-      [hashedPassword, token]
+      [hashedPassword, token],
     );
 
     res.json({ message: "Password updated successfully" });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });
@@ -424,7 +403,7 @@ app.post("/editprofile", async (req, res) => {
     // Fetch the user's existing hashed password from the database
     const existing = await pool.query(
       "SELECT password FROM users WHERE id = $1",
-      [user_id]
+      [user_id],
     );
     hashedPassword = existing.rows[0]?.password;
   }
@@ -439,7 +418,7 @@ app.post("/editprofile", async (req, res) => {
            currency_code = $6
        WHERE id = $1
        RETURNING id`,
-      [user_id, username, email, hashedPassword, addresses, currency_code]
+      [user_id, username, email, hashedPassword, addresses, currency_code],
     );
 
     let response = {
@@ -535,7 +514,7 @@ app.post("/add-meal", async (req, res) => {
     const result = await pool.query(
       `INSERT INTO meals (name, description, price, image, category) 
        VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-      [name, description, price, image, category]
+      [name, description, price, image, category],
     );
 
     res.status(201).json({ message: "Meal Added!", mealId: result.rows[0].id });

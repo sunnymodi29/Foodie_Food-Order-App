@@ -26,9 +26,14 @@ export default function ForgotPassword() {
       );
 
       const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+
       setMessage(data.message || "Reset link sent successfully!");
     } catch (err) {
-      setMessage("Something went wrong! Please try again.");
+      setMessage(err.message || "Something went wrong! Please try again.");
     }
 
     setLoading(false);

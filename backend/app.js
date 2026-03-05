@@ -1,5 +1,3 @@
-import fs from "node:fs/promises";
-
 import bodyParser from "body-parser";
 
 import "dotenv/config";
@@ -11,6 +9,16 @@ import crypto from "crypto";
 import dns from "dns";
 dns.setDefaultResultOrder("ipv4first");
 import nodemailer from "nodemailer";
+
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
 const { Pool } = pkg;
 
@@ -338,20 +346,6 @@ app.post("/forgot-password", async (req, res) => {
 
     const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 10000,
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
     try {
       await transporter.sendMail({
         from: `"Foodie Support" <${process.env.EMAIL}>`,
@@ -370,12 +364,15 @@ app.post("/forgot-password", async (req, res) => {
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Failed to send email. Please try again later." });
+      res
+        .status(500)
+        .json({ error: "Failed to send email. Please try again later." });
     }
-      
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to send email. Please try again later." });
+    res
+      .status(500)
+      .json({ error: "Failed to send email. Please try again later." });
   }
 });
 

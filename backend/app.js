@@ -338,7 +338,7 @@ app.post("/forgot-password", async (req, res) => {
 
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 465,
+      port: 587,
       secure: true,
       connectionTimeout: 10000,
       greetingTimeout: 10000,
@@ -348,34 +348,31 @@ app.post("/forgot-password", async (req, res) => {
         pass: process.env.EMAIL_PASS,
       },
     });
-    
-    transporter.verify(function (error, success) {
-      if (error) {
-        console.log("SMTP error:", error);
-      } else {
-        console.log("SMTP server ready");
-      }
-    });
 
-    await transporter.sendMail({
-      from: `"Foodie Support" <${process.env.EMAIL}>`,
-      to: email,
-      subject: "Reset your password",
-      html: `
+    try {
+      await transporter.sendMail({
+        from: `"Foodie Support" <${process.env.EMAIL}>`,
+        to: email,
+        subject: "Reset your password",
+        html: `
         <p>You requested a password reset.</p>
         <p>Click the link below to reset your password:</p>
         <a href="${resetLink}">${resetLink}</a>
         <p>This link expires in 15 minutes.</p>
-      `,
-    });
+        `,
+      });
 
-
-    res.json({
-      message: "If this email exists, a reset link was sent to your email",
-    });
+      res.json({
+        message: "If this email exists, a reset link was sent to your email",
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Failed to send email. Please try again later." });
+    }
+      
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: "Failed to send email. Please try again later." });
   }
 });
 

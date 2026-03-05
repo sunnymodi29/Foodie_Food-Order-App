@@ -8,6 +8,8 @@ import pkg from "pg";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import dns from "dns";
+dns.setDefaultResultOrder("ipv4first");
 import nodemailer from "nodemailer";
 
 const { Pool } = pkg;
@@ -339,7 +341,8 @@ app.post("/forgot-password", async (req, res) => {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
-      secure: true,
+      secure: false,
+      requireTLS: true,
       connectionTimeout: 10000,
       greetingTimeout: 10000,
       socketTimeout: 10000,

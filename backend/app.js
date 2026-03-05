@@ -33,7 +33,7 @@ dns.lookup("smtp-relay.brevo.com", (err, address, family) => {
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
-  secure: true,
+  secure: false,
   family: 4,
   auth: {
     user: process.env.SMTP_USER,

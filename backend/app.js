@@ -7,28 +7,8 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import dns from "dns";
-import net from "net";
 dns.setDefaultResultOrder("ipv4first");
 import nodemailer from "nodemailer";
-
-dns.lookup("smtp-relay.brevo.com", (err, address, family) => {
-  if (err) {
-    console.error("DNS lookup failed:", err);
-  } else {
-    console.log(`DNS resolved: ${address} (IPv${family})`);
-
-    const socket = net.createConnection(465, address);
-
-    socket.on("connect", () => {
-      console.log("TCP connection to SMTP server successful");
-      socket.end();
-    });
-
-    socket.on("error", (err) => {
-      console.error("TCP connection failed:", err);
-    });
-  }
-});
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -42,14 +22,6 @@ const transporter = nodemailer.createTransport({
   connectionTimeout: 20000,
   greetingTimeout: 20000,
   socketTimeout: 20000,
-});
-
-transporter.verify((err, success) => {
-  if (err) {
-    console.error("SMTP connection failed:", err);
-  } else {
-    console.log("SMTP server is ready!");
-  }
 });
 
 const { Pool } = pkg;
@@ -368,12 +340,14 @@ app.post("/forgot-password", async (req, res) => {
 
     const token = crypto.randomBytes(32).toString("hex");
 
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
     await pool.query(
       `UPDATE users 
        SET reset_token=$1,
        reset_token_expiry=NOW() + INTERVAL '15 minutes'
        WHERE email=$2`,
-      [token, email],
+      [hashedToken, email],
     );
 
     const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
@@ -413,12 +387,14 @@ app.post("/reset-password/:token", async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
 
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
   try {
     const user = await pool.query(
       `SELECT * FROM users
        WHERE reset_token=$1
        AND reset_token_expiry > NOW()`,
-      [token],
+      [hashedToken],
     );
 
     if (user.rows.length === 0) {

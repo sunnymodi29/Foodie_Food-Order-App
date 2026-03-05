@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Input from "../components/UI/Input";
+import Button from "../components/UI/Button";
 
 export default function ResetPassword() {
   const { token } = useParams();

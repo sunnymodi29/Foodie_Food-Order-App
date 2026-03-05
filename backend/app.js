@@ -9,7 +9,6 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import { sendResetEmail } from "./email.js";
 
 const { Pool } = pkg;
 
@@ -315,32 +314,68 @@ app.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
 
   try {
-    const user = await pool.query("SELECT * FROM users WHERE email=$1", [
+    const user = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
 
     if (user.rows.length === 0) {
       return res.json({
-        message: "If email exists, reset link sent",
+        message: "If this email exists, a reset link was sent to your email",
       });
     }
 
     const token = crypto.randomBytes(32).toString("hex");
 
     await pool.query(
-      `UPDATE users
+      `UPDATE users 
        SET reset_token=$1,
-           reset_token_expiry=NOW() + INTERVAL '15 minutes'
+       reset_token_expiry=NOW() + INTERVAL '15 minutes'
        WHERE email=$2`,
       [token, email],
     );
 
-    await sendResetEmail(email, token);
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
 
-    res.json({ message: "Reset link sent successfully!" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong! Please try again." });
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+    
+    transporter.verify(function (error, success) {
+      if (error) {
+        console.log("SMTP error:", error);
+      } else {
+        console.log("SMTP server ready");
+      }
+    });
+
+    await transporter.sendMail({
+      from: `"Foodie Support" <${process.env.EMAIL}>`,
+      to: email,
+      subject: "Reset your password",
+      html: `
+        <p>You requested a password reset.</p>
+        <p>Click the link below to reset your password:</p>
+        <a href="${resetLink}">${resetLink}</a>
+        <p>This link expires in 15 minutes.</p>
+      `,
+    });
+
+
+    res.json({
+      message: "If this email exists, a reset link was sent to your email",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 

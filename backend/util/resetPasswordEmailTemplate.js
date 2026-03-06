@@ -1,10 +1,10 @@
 export const resetPasswordTemplate = (email, resetLink) => `
-<div style="background:#f4f6f8;padding:40px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0">
     <tr>
       <td align="center">
 
-        <table width="500" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:10px;padding:40px;box-shadow:0 4px 10px rgba(0,0,0,0.05);">
+        <table width="500" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:40px;">
 
           <tr>
             <td align="center">

@@ -9,7 +9,7 @@ import crypto from "crypto";
 import dns from "dns";
 dns.setDefaultResultOrder("ipv4first");
 import nodemailer from "nodemailer";
-import { resetPasswordTemplate } from "./utils/resetPasswordEmailTemplate";
+import { resetPasswordTemplate } from "./util/resetPasswordEmailTemplate.js";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,

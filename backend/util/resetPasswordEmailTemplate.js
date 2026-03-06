@@ -1,5 +1,3 @@
-import logo from "../../src/assets/logo.jpg";
-
 export const resetPasswordTemplate = (email, resetLink) => `
 <div style="background:#f4f6f8;padding:40px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0">
@@ -10,7 +8,7 @@ export const resetPasswordTemplate = (email, resetLink) => `
 
           <tr>
             <td align="center">
-              <img src="${logo}" width="60" style="width: 60px;height: 60px;object-fit: contain;border-radius: 50%;border: 2px solid #ffc404">
+              <img src="https://foodie-food-order-app.vercel.app/assets/logo-3a62f2e6.jpg" width="60" style="width: 60px;height: 60px;object-fit: contain;border-radius: 50%;border: 2px solid #ffc404">
               <h1 style="margin:0;color:#ffc404;">
                 <span>Foodie</span>
               </h1>

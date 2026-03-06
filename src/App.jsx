@@ -43,7 +43,11 @@ function AppContent() {
   return (
     <>
       <ScrollToTopButton />
-      {user && location.pathname !== "/404" && <Header />}
+      {user &&
+        location.pathname !== "/404" &&
+        location.pathname !== "/login" &&
+        location.pathname !== "/forgot-password" &&
+        !location.pathname.startsWith("/reset-password") && <Header />}
       <Cart />
       <Checkout />
       <Routes>

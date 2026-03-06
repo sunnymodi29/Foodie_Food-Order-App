@@ -9,6 +9,7 @@ import crypto from "crypto";
 import dns from "dns";
 dns.setDefaultResultOrder("ipv4first");
 import nodemailer from "nodemailer";
+import { resetPasswordTemplate } from "./utils/resetPasswordEmailTemplate";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -333,8 +334,8 @@ app.post("/forgot-password", async (req, res) => {
     ]);
 
     if (user.rows.length === 0) {
-      return res.json({
-        message: "If this email exists, a reset link was sent to your email",
+      return res.status(404).json({
+        error: "User not found! Please check your email and try again.",
       });
     }
 
@@ -357,16 +358,11 @@ app.post("/forgot-password", async (req, res) => {
         from: `"Foodie Support" <${process.env.EMAIL}>`,
         to: email,
         subject: "Reset your password",
-        html: `
-        <p>You requested a password reset.</p>
-        <p>Click the link below to reset your password:</p>
-        <a href="${resetLink}">${resetLink}</a>
-        <p>This link expires in 15 minutes.</p>
-        `,
+        html: resetPasswordTemplate(email, resetLink),
       });
 
       res.json({
-        message: "If this email exists, a reset link was sent to your email",
+        message: "Reset link sent successfully!",
       });
     } catch (error) {
       console.error(error);

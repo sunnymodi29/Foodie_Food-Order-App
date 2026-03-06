@@ -1,17 +1,18 @@
 import { useState } from "react";
 import Input from "../components/UI/Input";
 import Button from "../components/UI/Button";
+import logoImg from "../assets/logo-transparent.png";
+import Loader from "../components/Loader";
+import Toastify from "../components/Toastify";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setLoading(true);
-    setMessage("");
 
     try {
       const res = await fetch(
@@ -31,35 +32,49 @@ export default function ForgotPassword() {
         throw new Error(data.error || "Something went wrong");
       }
 
-      setMessage(data.message || "Reset link sent successfully!");
+      Toastify({
+        toastType: "success",
+        message: data.message || "Reset link sent successfully!",
+      });
     } catch (err) {
-      setMessage(err.message || "Something went wrong! Please try again.");
+      Toastify({
+        toastType: "error",
+        message:
+          err.error || err.message || "Something went wrong! Please try again.",
+      });
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
-    <div className="forgot-password-container">
-      <h2>Forgot Password</h2>
+    <>
+      <div className="food-login-container">
+        <div className="food-login-card">
+          <div className="food-login-header">
+            <img src={logoImg} alt="Foodie Logo" className="logo" />
+            <h2>Forgot Password</h2>
+            <p>Enter your email to reset your password</p>
+          </div>
 
-      <form onSubmit={handleSubmit} className="forgot-password-form">
-        <Input
-          label="Email"
-          type="email"
-          placeholder="Enter your email"
-          name="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+          <form onSubmit={handleSubmit} className="forgot-password-form">
+            <Input
+              label="Email"
+              type="email"
+              placeholder="Enter your email"
+              name="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-        <Button type="submit" disabled={loading}>
-          {loading ? "Sending..." : "Send Reset Link"}
-        </Button>
-      </form>
-
-      {message && <p>{message}</p>}
-    </div>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Sending..." : "Send Reset Link"}
+            </Button>
+          </form>
+        </div>
+      </div>
+      {loading && <Loader>Sending reset link...</Loader>}
+    </>
   );
 }

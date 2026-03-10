@@ -1,15 +1,16 @@
-import logoImg from "../assets/logo.jpg";
+import logoImg from "@/assets/logo.jpg";
 import Button from "./UI/Button";
 import { useContext } from "react";
-import CartContext from "../store/CartContext";
-import UserProgressContext from "../store/UserProgressContext";
-import { useNavigate } from "react-router-dom";
+import CartContext from "@/src/store/CartContext";
+import UserProgressContext from "@/src/store/UserProgressContext";
+import { useRouter, usePathname } from "next/navigation";
 import Dropdown from "./DropDown";
-import { useAuth } from "../store/AuthContext";
+import { useAuth } from "@/src/store/AuthContext";
 import { House, ShoppingCart, User } from "lucide-react";
 
 const Header = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
+  const pathname = usePathname();
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
   const { user, logout } = useAuth();
@@ -37,18 +38,18 @@ const Header = () => {
     <header id={user?.admin ? "admin-main-header" : "main-header"}>
       {!user?.admin && (
         <div id="title">
-          <img src={logoImg} alt="Foodie Logo" />
+          <img src={logoImg.src || logoImg} alt="Foodie Logo" />
           <h1>Foodie</h1>
         </div>
       )}
       <nav>
         {!user?.admin &&
-          location.pathname !== "/" &&
-          location.pathname !== "/admin/dashboard" && (
+          pathname !== "/" &&
+          pathname !== "/admin/dashboard" && (
             <Button
               textOnly
               onClick={() =>
-                user?.admin ? navigate("/admin/dashboard") : navigate("/")
+                user?.admin ? router.push("/admin/dashboard") : router.push("/")
               }
             >
               <House size={30} />
@@ -78,3 +79,4 @@ const Header = () => {
 };
 
 export default Header;
+

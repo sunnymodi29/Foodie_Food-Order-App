@@ -1,12 +1,12 @@
 import Modal from "./UI/Modal";
 import { useContext, useEffect, useState } from "react";
-import CartContext from "../store/CartContext";
-import UserProgressContext from "../store/UserProgressContext";
+import CartContext from "@/src/store/CartContext";
+import UserProgressContext from "@/src/store/UserProgressContext";
 import Input from "./UI/Input";
 import Button from "./UI/Button";
-import useHttp from "../hooks/useHttp";
+import useHttp from "@/src/hooks/useHttp";
 import Error from "./Error";
-import { useAuth } from "../store/AuthContext";
+import { useAuth } from "@/src/store/AuthContext";
 import Addresses from "./Addresses";
 import Toastify from "./Toastify";
 import { ChevronLeft } from "lucide-react";
@@ -40,7 +40,7 @@ const Checkout = () => {
     sendRequest,
     clearData,
   } = useHttp(
-    "https://foodie-food-order-app.onrender.com/orders",
+    "/api/orders",
     requestConfig
   );
 
@@ -154,14 +154,6 @@ const Checkout = () => {
           </p>
         )}
 
-        {/* <Input label="Full Name" id="name" type="text" />
-        <Input label="E-Mail Address" id="email" type="email" />
-        <Input label="Street" id="street" type="text" />
-        <div className="control-row">
-          <Input label="Postal Code" id="postal-code" type="text" />
-          <Input label="City" id="city" type="text" />
-        </div> */}
-
         {error && <Error title="Failed to submit order" message={error} />}
 
         <p className="modal-actions">{actions}</p>
@@ -171,3 +163,4 @@ const Checkout = () => {
 };
 
 export default Checkout;
+

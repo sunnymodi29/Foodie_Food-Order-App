@@ -1,17 +1,15 @@
 import Modal from "./UI/Modal";
 import Button from "./UI/Button";
 import { useContext } from "react";
-import CartContext from "../store/CartContext";
-import UserProgressContext from "../store/UserProgressContext";
+import CartContext from "@/src/store/CartContext";
+import UserProgressContext from "@/src/store/UserProgressContext";
 import CartItem from "./CartItem";
-import { useAuth } from "../store/AuthContext";
-// import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/src/store/AuthContext";
 
 const Cart = () => {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
   const { currencyFormatter } = useAuth();
-  // const navigate = useNavigate();
 
   const cartTotal = cartCtx.items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.price,
@@ -52,7 +50,6 @@ const Cart = () => {
         </Button>
         {cartCtx.items.length > 0 && (
           <Button onClick={handleGoToCheckout}>Go to Checkout</Button>
-          // <Button onClick={navigate("/checkout")}>Go to Checkout</Button>
         )}
       </p>
     </Modal>
@@ -60,3 +57,4 @@ const Cart = () => {
 };
 
 export default Cart;
+

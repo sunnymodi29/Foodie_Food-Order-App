@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 const Dropdown = ({ options = [], trigger }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -18,7 +18,7 @@ const Dropdown = ({ options = [], trigger }) => {
 
   const handleOptionClick = (option) => {
     setIsOpen(false);
-    if (option.to) navigate(option.to);
+    if (option.to) router.push(option.to);
     if (option.onClick) option.onClick();
   };
 
@@ -46,3 +46,4 @@ const Dropdown = ({ options = [], trigger }) => {
 };
 
 export default Dropdown;
+

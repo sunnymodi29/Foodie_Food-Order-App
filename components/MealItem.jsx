@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import Button from "./UI/Button";
-import CartContext from "../store/CartContext";
+import CartContext from "@/src/store/CartContext";
 import Toastify from "./Toastify";
-import { useAuth } from "../store/AuthContext";
+import { useAuth } from "@/src/store/AuthContext";
 
-const MealItem = ({ meal, customerData, type }) => {
+const MealItem = ({ meal, type }) => {
   const cartCtx = useContext(CartContext);
   const { currencyFormatter } = useAuth();
 
@@ -23,7 +23,7 @@ const MealItem = ({ meal, customerData, type }) => {
         <img
           src={
             meal.image.startsWith("images/")
-              ? `https://foodie-food-order-app.onrender.com/${meal.image}`
+              ? `/${meal.image}`
               : meal.image
           }
           alt={meal.name}
@@ -47,3 +47,4 @@ const MealItem = ({ meal, customerData, type }) => {
 };
 
 export default MealItem;
+

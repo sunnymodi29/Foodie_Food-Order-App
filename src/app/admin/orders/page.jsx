@@ -16,7 +16,7 @@ export default function AdminOrdersPage() {
   const [updatingOrderId, setUpdatingOrderId] = useState(null);
 
   const { data: ordersData, isLoading } = useHttp(
-    user ? `/api/orders/${user.id}` : null,
+    user ? `/api/orders/user/${user.id}` : null,
     requestConfig,
     [],
   );

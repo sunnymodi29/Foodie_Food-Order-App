@@ -26,7 +26,7 @@ export async function POST(request) {
       auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
     });
 
-    const resetLink = `${process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000"}/reset-password/${token}`;
+    const resetLink = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/reset-password/${token}`;
 
     await transporter.sendMail({
       from: `"Foodie Support" <${process.env.EMAIL}>`,

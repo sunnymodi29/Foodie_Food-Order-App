@@ -2,11 +2,20 @@ import { useCallback, useEffect, useState } from "react";
 
 async function sendHttpRequest(url, config) {
   const response = await fetch(url, config);
+
+  const contentType = response.headers.get("content-type");
+
+  if (!contentType || !contentType.includes("application/json")) {
+    const text = await response.text();
+    console.error("Non JSON response:", text);
+    throw new Error("Server did not return JSON.");
+  }
+
   const resData = await response.json();
 
   if (!response.ok) {
     throw new Error(
-      resData.message || "Something went wrong, failed to send request."
+      resData.message || "Something went wrong, failed to send request.",
     );
   }
 
@@ -41,11 +50,11 @@ export default function useHttp(url, config, initialData) {
         throw error;
       }
     },
-    [url, config]
+    [url, config],
   );
 
   useEffect(() => {
-    if (config && (config.method === "GET" || !config.method || !config)) {
+    if (!config || config.method === "GET") {
       sendRequest();
     }
   }, [sendRequest, config]);

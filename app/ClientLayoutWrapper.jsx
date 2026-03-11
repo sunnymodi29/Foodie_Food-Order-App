@@ -35,7 +35,7 @@ export default function ClientLayoutWrapper({ children }) {
 
     // Redirect admin from home to dashboard
     if (user?.admin && pathname === "/") {
-      router.replace("/admin/dashboard");
+      router.push("/admin/dashboard");
     }
 
   }, [user, pathname, loading, router]);

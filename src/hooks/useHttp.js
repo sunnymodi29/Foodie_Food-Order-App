@@ -3,19 +3,19 @@ import { useCallback, useEffect, useState } from "react";
 async function sendHttpRequest(url, config) {
   const response = await fetch(url, config);
 
-  const contentType = response.headers.get("content-type");
+  let resData;
 
-  if (!contentType || !contentType.includes("application/json")) {
+  try {
+    resData = await response.json();
+  } catch (err) {
     const text = await response.text();
-    console.error("Non JSON response:", text);
-    throw new Error("Server did not return JSON.");
+    console.error("Non-JSON response:", text);
+    throw new Error("Server returned non JSON response");
   }
-
-  const resData = await response.json();
 
   if (!response.ok) {
     throw new Error(
-      resData.message || "Something went wrong, failed to send request.",
+      resData.message || "Something went wrong, failed to send request."
     );
   }
 

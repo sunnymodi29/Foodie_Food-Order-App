@@ -2,16 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 async function sendHttpRequest(url, config) {
   const response = await fetch(url, config);
-
-  let resData;
-
-  try {
-    resData = await response.json();
-  } catch (err) {
-    const text = await response.text();
-    console.error("Non-JSON response:", text);
-    throw new Error("Server returned non JSON response");
-  }
+  const resData = await response.json();
 
   if (!response.ok) {
     throw new Error(
@@ -50,11 +41,11 @@ export default function useHttp(url, config, initialData) {
         throw error;
       }
     },
-    [url, config],
+    [url, config]
   );
 
   useEffect(() => {
-    if (!config || config.method === "GET") {
+    if (config && (config.method === "GET" || !config.method || !config)) {
       sendRequest();
     }
   }, [sendRequest, config]);

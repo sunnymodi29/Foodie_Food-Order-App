@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export async function GET(request, { params }) {
-  const { userId } = await params;
+  const { userId } = params;
 
   try {
     const userRes = await pool.query("SELECT * FROM users WHERE id = $1", [userId]);

@@ -19,7 +19,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       message: "User created!",
-      user: { id: result.rows[0].id, username, email, password: hashedPassword, addresses: "" },
+      user: { id: result.rows[0].id, username, email, password: hashedPassword, addresses: "", admin: false },
     }, { status: 201 });
   } catch (error) {
     console.error("Database error:", error);

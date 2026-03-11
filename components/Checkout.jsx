@@ -1,3 +1,5 @@
+"use client";
+
 import Modal from "./UI/Modal";
 import { useContext, useEffect, useState } from "react";
 import CartContext from "@/src/store/CartContext";

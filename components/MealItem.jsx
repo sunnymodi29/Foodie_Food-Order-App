@@ -22,9 +22,9 @@ const MealItem = ({ meal, type }) => {
       <article>
         <img
           src={
-            meal.image.startsWith("images/")
+            meal.image && meal.image.startsWith("images/")
               ? `/${meal.image}`
-              : meal.image
+              : meal.image || "/logo.jpg"
           }
           alt={meal.name}
         />

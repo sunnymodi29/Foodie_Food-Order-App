@@ -25,6 +25,7 @@ export default function useHttp(url, config, initialData) {
   const sendRequest = useCallback(
     async function sendRequest(data, secondUrl) {
       const urllink = secondUrl ? secondUrl : url;
+      if (!urllink) return;
       setisLoading(true);
       try {
         const resData = await sendHttpRequest(urllink, {

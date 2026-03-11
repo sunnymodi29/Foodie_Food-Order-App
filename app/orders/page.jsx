@@ -94,7 +94,7 @@ export default function OrdersPage() {
             <div className="order-items">
               {order.items.map((item) => (
                 <div className="order-item" key={item.id}>
-                  <img src={item.image.startsWith('images/') ? `/${item.image}` : item.image} alt={item.name} />
+                  <img src={item.image ? (item.image.startsWith('images/') ? `/${item.image}` : item.image) : "/logo.jpg"} alt={item.name} />
                   <div className="item-info">
                     <h4>{item.name}</h4>
                     <p>{item.description}</p>

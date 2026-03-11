@@ -1,4 +1,4 @@
-import logoImg from "@/assets/logo.jpg";
+import logoImg from "@/src/assets/logo.jpg";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Input from "@/components/UI/Input";
 import Button from "@/components/UI/Button";
-import logoImg from "@/assets/logo-transparent.png";
+import logoImg from "@/src/assets/logo-transparent.png";
 import Loader from "@/components/Loader";
 import Toastify from "@/components/Toastify";
 

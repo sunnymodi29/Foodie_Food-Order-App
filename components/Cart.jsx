@@ -1,3 +1,5 @@
+"use client";
+
 import Modal from "./UI/Modal";
 import Button from "./UI/Button";
 import { useContext } from "react";

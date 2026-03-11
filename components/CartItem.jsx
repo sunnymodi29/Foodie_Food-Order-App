@@ -1,4 +1,6 @@
-import { useAuth } from "../store/AuthContext";
+"use client";
+
+import { useAuth } from "@/src/store/AuthContext";
 
 const CartItem = ({ name, quantity, price, onIncrease, onDecrease }) => {
   const { currencyFormatter } = useAuth();

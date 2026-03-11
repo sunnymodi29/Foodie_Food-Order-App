@@ -1,7 +1,9 @@
+"use client";
+
 import { useState } from "react";
 import Input from "./UI/Input";
 import Button from "./UI/Button";
-import { useAuth } from "../store/AuthContext";
+import { useAuth } from "@/src/store/AuthContext";
 
 const Addresses = ({
   addresses,

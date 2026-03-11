@@ -111,7 +111,7 @@ export default function AdminMenuPage() {
                     )}
                   </td>
                   <td>{meal.id}</td><td>{meal.name}</td><td>{meal.description}</td><td>{currencyFormatter(meal.price)}</td>
-                  <td className="table_img"><img src={`/api/images/${meal.image}`} alt={meal.name} /></td>
+                  <td className="table_img"><img src={meal.image ? `/api/images/${meal.image}` : "/logo.jpg"} alt={meal.name} /></td>
                 </tr>
               ))}
             </tbody>

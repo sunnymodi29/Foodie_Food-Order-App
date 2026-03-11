@@ -21,6 +21,8 @@ export default function RootLayout({ children }) {
           <Checkout />
           {children}
         </Providers>
+        <div id="modal"></div>
+        <div id="toast"></div>
       </body>
     </html>
   );

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { formatCurrency } from "@/src/util/common";
+import { formatCurrency } from "util/common";
 
 const AuthContext = createContext();
 
@@ -22,17 +22,22 @@ export function AuthProvider({ children }) {
     if (storedUser) setUser(JSON.parse(storedUser));
     if (storedRate) setExchangeRate(parseFloat(storedRate));
     if (storedCurrency) setCurrency(storedCurrency);
-    
+
     setLoading(false);
   }, []);
 
   const fetchExchangeRate = async (targetCurrency) => {
     try {
-      const response = await fetch(`https://api.exchangerate-api.com/v4/latest/USD`);
+      const response = await fetch(
+        `https://api.exchangerate-api.com/v4/latest/USD`,
+      );
       const data = await response.json();
       if (data.rates[targetCurrency]) {
         setExchangeRate(data.rates[targetCurrency]);
-        localStorage.setItem("exchangeRate", data.rates[targetCurrency].toString());
+        localStorage.setItem(
+          "exchangeRate",
+          data.rates[targetCurrency].toString(),
+        );
       }
     } catch (error) {
       console.error("Failed to fetch exchange rate:", error);
@@ -45,7 +50,7 @@ export function AuthProvider({ children }) {
     if (!loginViaProfile) {
       if (isAdmin) router.push("/admin/dashboard");
       else router.push("/");
-      
+
       const userCurrency = userData.currency_code || "USD";
       setCurrency(userCurrency);
       localStorage.setItem("currency", userCurrency);

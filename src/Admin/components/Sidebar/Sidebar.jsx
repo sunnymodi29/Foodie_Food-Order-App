@@ -1,8 +1,7 @@
-import logoImg from "@/public/images/logo.jpg";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import "@/src/Admin/components/Sidebar/Sidebar.css";
+import "Admin/components/Sidebar/Sidebar.css";
 import {
   AlignLeft,
   X,
@@ -41,7 +40,7 @@ export default function Sidebar() {
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="sidebar-brand">
-            <img src={logoImg.src || logoImg} alt="Foodie Logo" />
+            <img src="/images/logo.jpg" alt="Foodie Logo" />
             <h1>Foodie</h1>
           </div>
           {isOpen && (
@@ -87,4 +86,3 @@ export default function Sidebar() {
     </>
   );
 }
-

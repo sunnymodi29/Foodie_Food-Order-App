@@ -21,7 +21,11 @@ export default function AdminMenuPage() {
   const [isSending, setIsSending] = useState(false);
   const [modals, setModals] = useState({ edit: false, delete: false });
 
-  const { data: fetchedMeals, isLoading } = useHttp("/api/meals", requestConfig, []);
+  const { data: fetchedMeals, isLoading } = useHttp(
+    "/api/meals",
+    requestConfig,
+    [],
+  );
   const fileInputRef = useRef();
   const MAX_IMAGE_SIZE = 1 * 1024 * 1024;
 
@@ -38,7 +42,9 @@ export default function AdminMenuPage() {
         body: JSON.stringify({ mealId, inStock }),
       });
       if (!res.ok) throw new Error("Failed");
-      setMeals(prev => prev.map(m => m.id === mealId ? { ...m, inStock } : m));
+      setMeals((prev) =>
+        prev.map((m) => (m.id === mealId ? { ...m, inStock } : m)),
+      );
       Toastify({ toastType: "success", message: "Stock Updated!!" });
     } catch (err) {
       Toastify({ toastType: "error", message: "Error updating stock." });
@@ -56,9 +62,11 @@ export default function AdminMenuPage() {
         body: JSON.stringify(selectedMeal),
       });
       if (!res.ok) throw new Error("Failed");
-      setMeals(prev => prev.map(m => m.id === selectedMeal.id ? selectedMeal : m));
+      setMeals((prev) =>
+        prev.map((m) => (m.id === selectedMeal.id ? selectedMeal : m)),
+      );
       Toastify({ toastType: "success", message: "Meal Edited!!" });
-      setModals(p => ({ ...p, edit: false }));
+      setModals((p) => ({ ...p, edit: false }));
     } catch (err) {
       Toastify({ toastType: "error", message: "Failed to update." });
     } finally {
@@ -75,7 +83,7 @@ export default function AdminMenuPage() {
         body: JSON.stringify({ id: mealId }),
       });
       if (!res.ok) throw new Error("Failed");
-      setMeals(prev => prev.filter(m => m.id !== mealId));
+      setMeals((prev) => prev.filter((m) => m.id !== mealId));
       Toastify({ toastType: "success", message: "Meal Deleted!!" });
     } catch (err) {
       Toastify({ toastType: "error", message: "Failed to delete." });
@@ -94,24 +102,78 @@ export default function AdminMenuPage() {
         <div className="table-wrapper">
           <table className="orders-table">
             <thead>
-              <tr><th>Actions</th><th>Stock</th><th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Image</th></tr>
+              <tr>
+                <th>Actions</th>
+                <th>Stock</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Image</th>
+              </tr>
             </thead>
             <tbody>
               {meals.map((meal) => (
-                <tr key={meal.id} className={!meal.inStock ? "out-of-stock" : ""}>
-                   <td>
-                    <Button textOnly onClick={() => { setSelectedMeal(meal); setModals(m => ({ ...m, edit: true })); }}>Edit</Button> | 
-                    <Button textOnly onClick={() => { setMealToDelete(meal); setModals(m => ({ ...m, delete: true })); }}>Delete</Button>
+                <tr
+                  key={meal.id}
+                  className={!meal.inStock ? "out-of-stock" : ""}
+                >
+                  <td>
+                    <Button
+                      textOnly
+                      onClick={() => {
+                        setSelectedMeal(meal);
+                        setModals((m) => ({ ...m, edit: true }));
+                      }}
+                    >
+                      Edit
+                    </Button>{" "}
+                    |
+                    <Button
+                      textOnly
+                      onClick={() => {
+                        setMealToDelete(meal);
+                        setModals((m) => ({ ...m, delete: true }));
+                      }}
+                    >
+                      Delete
+                    </Button>
                   </td>
                   <td>
-                    {updatingMealStock === meal.id ? <div className="spinner-small"></div> : (
-                      <select value={meal.inStock ? "available" : "not-available"} onChange={(e) => updateMealStock(meal.id, e.target.value === "available")}>
-                        <option value="available">Available</option><option value="not-available">Not Available</option>
+                    {updatingMealStock === meal.id ? (
+                      <div className="spinner_wrap">
+                        <div className="spinner-small"></div>
+                      </div>
+                    ) : (
+                      <select
+                        className="date-filter"
+                        value={meal.inStock ? "available" : "not-available"}
+                        onChange={(e) =>
+                          updateMealStock(
+                            meal.id,
+                            e.target.value === "available",
+                          )
+                        }
+                      >
+                        <option value="available">Available</option>
+                        <option value="not-available">Not Available</option>
                       </select>
                     )}
                   </td>
-                  <td>{meal.id}</td><td>{meal.name}</td><td>{meal.description}</td><td>{currencyFormatter(meal.price)}</td>
-                  <td className="table_img"><img src={meal.image ? `/api/images/${meal.image}` : "/logo.jpg"} alt={meal.name} /></td>
+                  <td>{meal.id}</td>
+                  <td>{meal.name}</td>
+                  <td>{meal.description}</td>
+                  <td>{currencyFormatter(meal.price)}</td>
+                  <td className="table_img">
+                    <img
+                      src={
+                        meal.image.startsWith("images/")
+                          ? `https://foodie-food-order-app.onrender.com/${meal.image}`
+                          : meal.image
+                      }
+                      alt={meal.name}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -119,29 +181,76 @@ export default function AdminMenuPage() {
         </div>
       </div>
 
-      <Modal open={modals.edit} onClose={() => setModals(p => ({ ...p, edit: false }))}>
+      <Modal
+        open={modals.edit}
+        onClose={() => setModals((p) => ({ ...p, edit: false }))}
+      >
         {selectedMeal && (
           <form className="edit-meal-form">
             <h2>Edit Meal</h2>
-            <Input label="Name" value={selectedMeal.name} onChange={e => setSelectedMeal(p => ({ ...p, name: e.target.value }))} />
-            <Input isTextarea label="Description" value={selectedMeal.description} onChange={e => setSelectedMeal(p => ({ ...p, description: e.target.value }))} />
-            <Input type="number" label="Price" value={(selectedMeal.price * exchangeRate).toFixed()} onChange={e => setSelectedMeal(p => ({ ...p, price: parseFloat(e.target.value) / exchangeRate }))} />
+            <Input
+              label="Name"
+              value={selectedMeal.name}
+              onChange={(e) =>
+                setSelectedMeal((p) => ({ ...p, name: e.target.value }))
+              }
+            />
+            <Input
+              isTextarea
+              label="Description"
+              value={selectedMeal.description}
+              onChange={(e) =>
+                setSelectedMeal((p) => ({ ...p, description: e.target.value }))
+              }
+            />
+            <Input
+              type="number"
+              label="Price"
+              value={(selectedMeal.price * exchangeRate).toFixed()}
+              onChange={(e) =>
+                setSelectedMeal((p) => ({
+                  ...p,
+                  price: parseFloat(e.target.value) / exchangeRate,
+                }))
+              }
+            />
             <div className="modal-actions">
-              <Button type="button" onClick={() => setModals(p => ({ ...p, edit: false }))}>Cancel</Button>
-              <Button type="button" onClick={handleSaveEdit}>{isSending ? "Saving..." : "Save"}</Button>
+              <Button
+                type="button"
+                onClick={() => setModals((p) => ({ ...p, edit: false }))}
+              >
+                Cancel
+              </Button>
+              <Button type="button" onClick={handleSaveEdit}>
+                {isSending ? "Saving..." : "Save"}
+              </Button>
             </div>
           </form>
         )}
       </Modal>
 
-      <Modal open={modals.delete} onClose={() => setModals(p => ({ ...p, delete: false }))}>
+      <Modal
+        open={modals.delete}
+        onClose={() => setModals((p) => ({ ...p, delete: false }))}
+      >
         {mealToDelete && (
           <div>
             <h2>Confirm Deletion</h2>
             <p>Delete {mealToDelete.name}?</p>
             <div className="modal-actions">
-              <Button onClick={() => setModals(p => ({ ...p, delete: false }))}>Cancel</Button>
-              <Button onClick={() => { handleDeleteMeal(mealToDelete.id); setModals(p => ({ ...p, delete: false })); }}>Delete</Button>
+              <Button
+                onClick={() => setModals((p) => ({ ...p, delete: false }))}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  handleDeleteMeal(mealToDelete.id);
+                  setModals((p) => ({ ...p, delete: false }));
+                }}
+              >
+                Delete
+              </Button>
             </div>
           </div>
         )}

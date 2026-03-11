@@ -1,7 +1,6 @@
 "use client";
 
 import { BarChart3, Users, ShoppingCart, DollarSign } from "lucide-react";
-import "@/src/Admin/adminIndex.css";
 import useHttp from "@/src/hooks/useHttp";
 import { useEffect, useState } from "react";
 import SkeletonText from "@/components/UI/SkeletonText";

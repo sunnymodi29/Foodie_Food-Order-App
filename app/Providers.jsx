@@ -8,9 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 
 export function Providers({ children }) {
   return (
-    <UserProgressContextProvider>
-      <CartContextProvider>
-        <AuthProvider>
+    <AuthProvider>
+      <UserProgressContextProvider>
+        <CartContextProvider>
           {children}
           <ToastContainer
             position="top-right"
@@ -24,8 +24,8 @@ export function Providers({ children }) {
             pauseOnHover
             theme="dark"
           />
-        </AuthProvider>
-      </CartContextProvider>
-    </UserProgressContextProvider>
+        </CartContextProvider>
+      </UserProgressContextProvider>
+    </AuthProvider>
   );
 }

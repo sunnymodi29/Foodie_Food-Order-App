@@ -5,6 +5,7 @@ import { useAuth } from "@/src/store/AuthContext";
 import { useEffect, useState } from "react";
 import Input from "@/components/UI/Input";
 import { formatDateTime } from "@/src/util/common";
+import notAvialableImage from "@/public/images/not-available-image.jpg";
 
 const requestConfig = {};
 
@@ -14,13 +15,10 @@ export default function OrdersPage() {
   const { user } = useAuth();
   const [selectedRange, setSelectedRange] = useState("all");
 
-  const {
-    data: ordersData,
-    isLoading,
-  } = useHttp(
+  const { data: ordersData, isLoading } = useHttp(
     user ? `/api/orders/${user.id}` : null,
     requestConfig,
-    []
+    [],
   );
 
   useEffect(() => {
@@ -31,10 +29,14 @@ export default function OrdersPage() {
     const now = new Date();
     const orderTime = new Date(orderDate);
     switch (selectedRange) {
-      case "week": return now - orderTime <= 7 * 24 * 60 * 60 * 1000;
-      case "month": return now - orderTime <= 30 * 24 * 60 * 60 * 1000;
-      case "3months": return now - orderTime <= 90 * 24 * 60 * 60 * 1000;
-      default: return true;
+      case "week":
+        return now - orderTime <= 7 * 24 * 60 * 60 * 1000;
+      case "month":
+        return now - orderTime <= 30 * 24 * 60 * 60 * 1000;
+      case "3months":
+        return now - orderTime <= 90 * 24 * 60 * 60 * 1000;
+      default:
+        return true;
     }
   };
 
@@ -44,7 +46,7 @@ export default function OrdersPage() {
         [item.name, item.description]
           .join(" ")
           .toLowerCase()
-          .includes(searchTerm.toLowerCase())
+          .includes(searchTerm.toLowerCase()),
       ) && filterByDateRange(order.created_at)
     );
   });
@@ -58,6 +60,7 @@ export default function OrdersPage() {
         type="text"
         placeholder="Search by meal name..."
         value={searchTerm}
+        className="search-input"
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <select
@@ -82,23 +85,39 @@ export default function OrdersPage() {
               </small>
               <span>
                 <span>Status: </span>
-                <span className={`status-${order.order_status?.replaceAll(" ", "").toLowerCase() || "pending"}`}>
+                <span
+                  className={`status-${order.order_status?.replaceAll(" ", "").toLowerCase() || "pending"}`}
+                >
                   {order.order_status}
                 </span>
               </span>
             </div>
             <div className="order-address">
               <strong>Delivering Address: </strong>
-              <span>{order.street}, {order.city} - {order.postal_code}</span>
+              <span>
+                {order.street}, {order.city} - {order.postal_code}
+              </span>
             </div>
             <div className="order-items">
               {order.items.map((item) => (
                 <div className="order-item" key={item.id}>
-                  <img src={item.image ? (item.image.startsWith('images/') ? `/${item.image}` : item.image) : "/logo.jpg"} alt={item.name} />
+                  <img
+                    src={
+                      item.image
+                        ? item.image.startsWith("images/")
+                          ? `https://foodie-food-order-app.onrender.com/${item.image}`
+                          : item.image
+                        : notAvialableImage.src
+                    }
+                    alt={item.name}
+                  />
                   <div className="item-info">
                     <h4>{item.name}</h4>
                     <p>{item.description}</p>
-                    <span>Quantity: {item.quantity} × ${item.price} = ${(item.quantity * parseFloat(item.price)).toFixed()}</span>
+                    <span>
+                      Quantity: {item.quantity} × ${item.price} = $
+                      {(item.quantity * parseFloat(item.price)).toFixed()}
+                    </span>
                   </div>
                 </div>
               ))}

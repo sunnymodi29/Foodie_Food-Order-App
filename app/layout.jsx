@@ -1,13 +1,14 @@
 import "@/src/index.css";
 import { Providers } from "./Providers";
-import Header from "@/components/Header";
-import Cart from "@/components/Cart";
-import Checkout from "@/components/Checkout";
-import ScrollToTopButton from "@/components/UI/ScrollToTopButton";
+import ClientLayoutWrapper from "./ClientLayoutWrapper";
 
 export const metadata = {
-  title: "Foodie - Order Food Online",
-  description: "Delicious food delivered to your door.",
+  title: "Foodie - Food Order App",
+  description:
+    "Order your favorite food online and get it delivered to your doorstep.",
+  icons: {
+    icon: "/images/logo-transparent.png",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -15,11 +16,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Providers>
-          <ScrollToTopButton />
-          <Header />
-          <Cart />
-          <Checkout />
-          {children}
+          <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
         </Providers>
         <div id="modal"></div>
         <div id="toast"></div>
@@ -27,4 +24,3 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-

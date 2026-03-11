@@ -23,8 +23,8 @@ const MealItem = ({ meal, type }) => {
         <img
           src={
             meal.image && meal.image.startsWith("images/")
-              ? `/${meal.image}`
-              : meal.image || "/logo.jpg"
+              ? `https://foodie-food-order-app.onrender.com/${meal.image}`
+              : meal.image
           }
           alt={meal.name}
         />
@@ -47,4 +47,3 @@ const MealItem = ({ meal, type }) => {
 };
 
 export default MealItem;
-

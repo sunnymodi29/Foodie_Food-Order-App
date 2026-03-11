@@ -1,6 +1,6 @@
 "use client";
 
-import logoImg from "@/src/assets/logo.jpg";
+import logoImg from "@/public/images/logo.jpg";
 import Button from "./UI/Button";
 import { useContext } from "react";
 import CartContext from "@/src/store/CartContext";

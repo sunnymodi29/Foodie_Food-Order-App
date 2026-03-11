@@ -1,5 +1,7 @@
 "use client";
 
+import AdminLayoutComponent from "@/src/Admin/components/AdminLayout/AdminLayout";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Input from "@/components/UI/Input";
@@ -99,7 +101,7 @@ export default function ProfilePage() {
     setNewPassword("");
   };
 
-  return (
+  const profileContent = (
     <Card>
       <div className="currency_wrapper">
         <CustomDropdown
@@ -122,5 +124,11 @@ export default function ProfilePage() {
         <Button className="w-100" onClick={handleSaveChanges}>Save Changes</Button>
       </div>
     </Card>
+  );
+
+  return user?.admin ? (
+    <AdminLayoutComponent>{profileContent}</AdminLayoutComponent>
+  ) : (
+    profileContent
   );
 }

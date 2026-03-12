@@ -15,7 +15,7 @@ export default function OrdersPage() {
   const [selectedRange, setSelectedRange] = useState("all");
 
   const { data: ordersData, isLoading } = useHttp(
-    user ? `/api/orders/user/${user.id}` : null,
+    user ? `/api/orders/${user.id}` : null,
     requestConfig,
     [],
   );

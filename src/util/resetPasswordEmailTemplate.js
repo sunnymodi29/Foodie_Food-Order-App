@@ -8,7 +8,7 @@ export const resetPasswordTemplate = (email, resetLink) => `
 
           <tr>
             <td align="center">
-              <img src="https://foodie-food-order-app.vercel.app/images/logo-3a62f2e6.jpg" width="60" style="width: 60px;height: 60px;object-fit: contain;border-radius: 50%;border: 2px solid #ffc404">
+              <img src="https://foodie-food-order-app.vercel.app/images/app-logos/logo.jpg" width="60" style="width: 60px;height: 60px;object-fit: contain;border-radius: 50%;border: 2px solid #ffc404">
               <h1 style="margin:0;color:#ffc404;">
                 <span>Foodie</span>
               </h1>

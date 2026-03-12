@@ -133,31 +133,6 @@ http://localhost:3000
 
 ---
 
-# 📁 Project Structure
-
-```
-src
- ├── app
- │   ├── api
- │   │   ├── meals
- │   │   ├── orders
- │   │   │   └── user/[userid]
- │   │   ├── auth
- │   │   └── ai
- │   ├── admin
- │   ├── orders
- │   ├── profile
- │   └── reset-password/[token]
- │
- ├── components
- ├── hooks
- ├── store
- ├── util
- └── lib
-```
-
----
-
 # 🔐 Authentication Flow
 
 1. User signs up or logs in
@@ -187,12 +162,6 @@ The app is deployed on:
 - **Neon** – PostgreSQL serverless database
 
 Deployment is automatic via GitHub integration.
-
----
-
-# 📜 License
-
-This project is licensed under the MIT License.
 
 ---
 

@@ -56,7 +56,7 @@ export default function ResetPasswordPage({ params }) {
       <div className="food-login-card">
         <div className="food-login-header">
           <img
-            src="/images/logo-transparent.png"
+            src="/images/app-logos/logo-transparent.png"
             alt="Foodie Logo"
             className="logo"
           />

@@ -104,7 +104,7 @@ export default function OrdersPage() {
                     src={
                       item.image
                         ? item.image.startsWith("images/")
-                          ? `https://foodie-food-order-app.onrender.com/${item.image}`
+                          ? `/${item.image}`
                           : item.image
                         : "/images/not-available-image.jpg"
                     }

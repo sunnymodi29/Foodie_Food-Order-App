@@ -7,7 +7,7 @@ export const metadata = {
   description:
     "Order your favorite food online and get it delivered to your doorstep.",
   icons: {
-    icon: "/images/logo-transparent.png",
+    icon: "/images/app-logos/logo-transparent.png",
   },
 };
 

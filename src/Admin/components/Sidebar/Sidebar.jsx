@@ -40,7 +40,7 @@ export default function Sidebar() {
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="sidebar-brand">
-            <img src="/images/logo.jpg" alt="Foodie Logo" />
+            <img src="/images/app-logos/logo.jpg" alt="Foodie Logo" />
             <h1>Foodie</h1>
           </div>
           {isOpen && (

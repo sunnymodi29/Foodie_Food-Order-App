@@ -39,7 +39,7 @@ const Header = () => {
     <header id={user?.admin ? "admin-main-header" : "main-header"}>
       {!user?.admin && (
         <div id="title">
-          <img src="/images/logo.jpg" alt="Foodie Logo" />
+          <img src="/images/app-logos/logo.jpg" alt="Foodie Logo" />
           <h1>Foodie</h1>
         </div>
       )}

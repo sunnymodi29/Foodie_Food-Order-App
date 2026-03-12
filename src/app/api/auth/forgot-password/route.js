@@ -2,12 +2,16 @@ import pool from "@/lib/db";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
+import { resetPasswordTemplate } from "@/util/resetPasswordEmailTemplate";
 
 export async function POST(request) {
   const { email } = await request.json();
 
   try {
-    const userResult = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const userResult = await pool.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email],
+    );
     if (userResult.rows.length === 0) {
       return NextResponse.json({ error: "User not found!" }, { status: 404 });
     }
@@ -17,7 +21,7 @@ export async function POST(request) {
 
     await pool.query(
       `UPDATE users SET reset_token=$1, reset_token_expiry=NOW() + INTERVAL '15 minutes' WHERE email=$2`,
-      [hashedToken, email]
+      [hashedToken, email],
     );
 
     const transporter = nodemailer.createTransport({
@@ -32,12 +36,15 @@ export async function POST(request) {
       from: `"Foodie Support" <${process.env.EMAIL}>`,
       to: email,
       subject: "Reset your password",
-      html: `<p>Click <a href="${resetLink}">here</a> to reset your password. Link expires in 15 mins.</p>`,
+      html: resetPasswordTemplate(email, resetLink),
     });
 
     return NextResponse.json({ message: "Reset link sent successfully!" });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "Failed to send email." }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to send email." },
+      { status: 500 },
+    );
   }
 }

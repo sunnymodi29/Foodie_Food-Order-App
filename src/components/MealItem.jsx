@@ -23,7 +23,7 @@ const MealItem = ({ meal, type }) => {
         <img
           src={
             meal.image && meal.image.startsWith("images/")
-              ? `https://foodie-food-order-app.onrender.com/${meal.image}`
+              ? `/${meal.image}`
               : meal.image
           }
           alt={meal.name}

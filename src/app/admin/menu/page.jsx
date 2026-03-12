@@ -20,6 +20,7 @@ export default function AdminMenuPage() {
   const [showLoader, setShowLoader] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [modals, setModals] = useState({ edit: false, delete: false });
+  const [imageError, setImageError] = useState(false);
 
   const { data: fetchedMeals, isLoading } = useHttp(
     "/api/meals",
@@ -50,6 +51,25 @@ export default function AdminMenuPage() {
       Toastify({ toastType: "error", message: "Error updating stock." });
     } finally {
       setUpdatingMealStock(null);
+    }
+  };
+
+  const handleEditImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > MAX_IMAGE_SIZE) {
+        e.target.value = "";
+        setImageError(true);
+        setTimeout(() => {
+          setImageError(false);
+        }, 2000);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedMeal((prev) => ({ ...prev, image: reader.result }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -214,6 +234,37 @@ export default function AdminMenuPage() {
                 }))
               }
             />
+            <div className="image-preview-wrapper">
+              <label>Image:</label>
+              <img
+                src={
+                  selectedMeal.image.startsWith("images/")
+                    ? `/${selectedMeal.image}`
+                    : selectedMeal.image
+                }
+                alt={selectedMeal.name}
+                className="modal-img"
+              />
+              <button
+                type="button"
+                className="change-image"
+                onClick={() => fileInputRef.current.click()}
+              >
+                Change Image
+              </button>
+              <Input
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                ref={fileInputRef}
+                onChange={handleEditImageChange}
+              />
+            </div>
+            {imageError && (
+              <span className="image-error-wrapper errorText">
+                Image is too large! Please select an image under 1MB.
+              </span>
+            )}
             <div className="modal-actions">
               <Button
                 type="button"
@@ -221,7 +272,11 @@ export default function AdminMenuPage() {
               >
                 Cancel
               </Button>
-              <Button type="button" onClick={handleSaveEdit} disabled={isSending}>
+              <Button
+                type="button"
+                onClick={handleSaveEdit}
+                disabled={isSending}
+              >
                 {isSending ? "Saving..." : "Save"}
               </Button>
             </div>

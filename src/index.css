@@ -228,20 +228,23 @@ body {
   text-decoration: underline;
 }
 
-.forgot-password-container, .reset-password-container {
+.forgot-password-container,
+.reset-password-container {
   max-width: 400px;
   padding: 100px 0;
   margin: 0 auto;
   text-align: center;
 }
 
-.forgot-password-form, .reset-password-form {
+.forgot-password-form,
+.reset-password-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.forgot-password-form label, .reset-password-form label {
+.forgot-password-form label,
+.reset-password-form label {
   display: none;
 }
 
@@ -634,6 +637,21 @@ h1 {
   background-color: rgba(0, 0, 0, 0.85);
 }
 
+.modal.edit-meal-modal {
+  overflow: hidden;
+}
+
+.edit-meal-form .form-wrapper {
+  overflow: auto;
+  max-height: 400px;
+  padding: 0 10px 0 0;
+}
+
+.edit-meal-form .form-wrapper::-webkit-scrollbar {
+  width: 4px;
+}
+
+
 .center {
   text-align: center;
 }
@@ -801,11 +819,11 @@ h1 {
 }
 
 .status-preparing {
-  color: #D2691E;
+  color: #d2691e;
 }
 
 .status-outfordelivery {
-  color: #4682B4;
+  color: #4682b4;
 }
 
 .order-address {

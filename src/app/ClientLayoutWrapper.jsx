@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/store/AuthContext";
+import { useNotFound } from "@/store/NotFoundContext";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Header from "components/Header";
@@ -10,10 +11,11 @@ import ScrollToTopButton from "components/UI/ScrollToTopButton";
 
 export default function ClientLayoutWrapper({ children }) {
   const { user, loading } = useAuth();
+  const { isNotFound } = useNotFound();
   const pathname = usePathname();
   const router = useRouter();
 
-  const publicRoutes = ["/login", "/forgot-password", "/404"];
+  const publicRoutes = ["/login", "/forgot-password"];
 
   const isResetPasswordRoute = pathname?.startsWith("/reset-password");
 
@@ -35,7 +37,7 @@ export default function ClientLayoutWrapper({ children }) {
   }, [user, pathname, loading, router]);
 
   const shouldShowHeader =
-    user && !publicRoutes.includes(pathname) && !isResetPasswordRoute;
+    user && !publicRoutes.includes(pathname) && !isResetPasswordRoute && !isNotFound;
 
   // Stop rendering until auth check completes
   if (loading) return null;

@@ -231,7 +231,7 @@ export default function AddMealsPage() {
                   <button
                     type="button"
                     onClick={handleAsk}
-                    disabled={loading}
+                    disabled={loading || !question.trim()}
                     className="ask-ai-button"
                   >
                     <CircleArrowRight />
@@ -241,7 +241,7 @@ export default function AddMealsPage() {
                     onClick={() => setShowAIPopup(false)}
                     className="close-popup-button"
                   >
-                    <X />
+                    <X color="#cfcfcfff" />
                   </button>
                 </div>
               </div>

@@ -202,69 +202,75 @@ export default function AdminMenuPage() {
       </div>
 
       <Modal
+        className="edit-meal-modal"
         open={modals.edit}
         onClose={() => setModals((p) => ({ ...p, edit: false }))}
       >
         {selectedMeal && (
           <form className="edit-meal-form">
             <h2>Edit Meal</h2>
-            <Input
-              label="Name"
-              value={selectedMeal.name}
-              onChange={(e) =>
-                setSelectedMeal((p) => ({ ...p, name: e.target.value }))
-              }
-            />
-            <Input
-              isTextarea
-              label="Description"
-              value={selectedMeal.description}
-              onChange={(e) =>
-                setSelectedMeal((p) => ({ ...p, description: e.target.value }))
-              }
-            />
-            <Input
-              type="number"
-              label="Price"
-              value={(selectedMeal.price * exchangeRate).toFixed()}
-              onChange={(e) =>
-                setSelectedMeal((p) => ({
-                  ...p,
-                  price: parseFloat(e.target.value) / exchangeRate,
-                }))
-              }
-            />
-            <div className="image-preview-wrapper">
-              <label>Image:</label>
-              <img
-                src={
-                  selectedMeal.image.startsWith("images/")
-                    ? `/${selectedMeal.image}`
-                    : selectedMeal.image
-                }
-                alt={selectedMeal.name}
-                className="modal-img"
-              />
-              <button
-                type="button"
-                className="change-image"
-                onClick={() => fileInputRef.current.click()}
-              >
-                Change Image
-              </button>
+            <div className="form-wrapper">
               <Input
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                ref={fileInputRef}
-                onChange={handleEditImageChange}
+                label="Name"
+                value={selectedMeal.name}
+                onChange={(e) =>
+                  setSelectedMeal((p) => ({ ...p, name: e.target.value }))
+                }
               />
+              <Input
+                isTextarea
+                label="Description"
+                value={selectedMeal.description}
+                onChange={(e) =>
+                  setSelectedMeal((p) => ({
+                    ...p,
+                    description: e.target.value,
+                  }))
+                }
+              />
+              <Input
+                type="number"
+                label="Price"
+                value={(selectedMeal.price * exchangeRate).toFixed()}
+                onChange={(e) =>
+                  setSelectedMeal((p) => ({
+                    ...p,
+                    price: parseFloat(e.target.value) / exchangeRate,
+                  }))
+                }
+              />
+              <div className="image-preview-wrapper">
+                <label>Image:</label>
+                <img
+                  src={
+                    selectedMeal.image.startsWith("images/")
+                      ? `/${selectedMeal.image}`
+                      : selectedMeal.image
+                  }
+                  alt={selectedMeal.name}
+                  className="modal-img"
+                />
+                <button
+                  type="button"
+                  className="change-image"
+                  onClick={() => fileInputRef.current.click()}
+                >
+                  Change Image
+                </button>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  ref={fileInputRef}
+                  onChange={handleEditImageChange}
+                />
+              </div>
+              {imageError && (
+                <span className="image-error-wrapper errorText">
+                  Image is too large! Please select an image under 1MB.
+                </span>
+              )}
             </div>
-            {imageError && (
-              <span className="image-error-wrapper errorText">
-                Image is too large! Please select an image under 1MB.
-              </span>
-            )}
             <div className="modal-actions">
               <Button
                 type="button"

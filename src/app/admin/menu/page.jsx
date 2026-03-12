@@ -221,7 +221,7 @@ export default function AdminMenuPage() {
               >
                 Cancel
               </Button>
-              <Button type="button" onClick={handleSaveEdit}>
+              <Button type="button" onClick={handleSaveEdit} disabled={isSending}>
                 {isSending ? "Saving..." : "Save"}
               </Button>
             </div>

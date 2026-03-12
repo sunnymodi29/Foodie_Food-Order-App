@@ -4,13 +4,11 @@ import Modal from "./UI/Modal";
 import { useContext, useEffect, useState } from "react";
 import CartContext from "store/CartContext";
 import UserProgressContext from "store/UserProgressContext";
-import Input from "./UI/Input";
 import Button from "./UI/Button";
 import useHttp from "@/hooks/useHttp";
 import Error from "./Error";
 import { useAuth } from "@/store/AuthContext";
 import Addresses from "./Addresses";
-import Toastify from "./Toastify";
 import { ChevronLeft } from "lucide-react";
 
 const requestConfig = {
@@ -97,15 +95,11 @@ const Checkout = () => {
       <Button type="button" className="secondary-button" onClick={handleClose}>
         Close
       </Button>
-      <Button type="submit" onClick={handleSubmit}>
-        Submit Order
+      <Button type="submit" onClick={handleSubmit} disabled={isSending}>
+        {isSending ? "Submitting..." : "Submit Order"}
       </Button>
     </>
   );
-
-  if (isSending) {
-    actions = <span>Sending order data...</span>;
-  }
 
   if (data && !error) {
     return (

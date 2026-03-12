@@ -1,11 +1,11 @@
 export const runtime = "nodejs";
 
 export async function GET(request, { params }) {
-  const { userId } = await params;
+  const { userid } = await params;
 
   return Response.json({
     success: true,
-    userId,
+    userid,
     message: "API route is working on Vercel"
   });
 }

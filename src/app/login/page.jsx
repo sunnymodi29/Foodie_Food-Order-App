@@ -137,16 +137,22 @@ export default function LoginPage() {
               }
             />
 
-            <p className="control">
-              <span
-                className="forgot-password"
-                onClick={() => router.push("/forgot-password")}
-              >
-                Forgot Password?
-              </span>
-            </p>
+            {isLoginMode && (
+              <p className="control forgot-password-control">
+                <span
+                  className="forgot-password"
+                  onClick={() => router.push("/forgot-password")}
+                >
+                  Forgot Password?
+                </span>
+              </p>
+            )}
 
-            <Button type="submit" disabled={isSending}>
+            <Button
+              type="submit"
+              disabled={isSending}
+              className={!isLoginMode && "signup-btn"}
+            >
               {isSending ? "Please wait..." : isLoginMode ? "Login" : "Sign Up"}
             </Button>
 

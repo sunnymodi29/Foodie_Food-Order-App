@@ -224,6 +224,15 @@ body {
   cursor: pointer;
 }
 
+.food-login-form .forgot-password-control {
+  display: inline;
+  text-align: right;
+}
+
+.food-login-form .signup-btn {
+  margin-top: 1rem;
+}
+
 .food-login-form .forgot-password:hover {
   text-decoration: underline;
 }

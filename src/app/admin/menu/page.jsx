@@ -8,6 +8,7 @@ import Loader from "components/Loader";
 import Toastify from "components/Toastify";
 import Input from "components/UI/Input";
 import { useAuth } from "@/store/AuthContext";
+import { X } from "lucide-react";
 
 const requestConfig = {};
 
@@ -21,6 +22,7 @@ export default function AdminMenuPage() {
   const [isSending, setIsSending] = useState(false);
   const [modals, setModals] = useState({ edit: false, delete: false });
   const [imageError, setImageError] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
 
   const { data: fetchedMeals, isLoading } = useHttp(
     "/api/meals",
@@ -199,6 +201,7 @@ export default function AdminMenuPage() {
                           : meal.image
                       }
                       alt={meal.name}
+                      onClick={() => setPreviewImage(meal)}
                     />
                   </td>
                 </tr>
@@ -305,7 +308,10 @@ export default function AdminMenuPage() {
         {mealToDelete && (
           <div>
             <h2>Confirm Deletion</h2>
-            <p>Delete {mealToDelete.name}?</p>
+            <p>
+              Are you sure you want to delete{" "}
+              <strong>{mealToDelete.name}</strong>?
+            </p>
             <div className="modal-actions">
               <Button
                 type="button"
@@ -323,6 +329,37 @@ export default function AdminMenuPage() {
               >
                 Delete
               </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
+      <Modal
+        className="image-preview-modal"
+        open={!!previewImage}
+        onClose={() => setPreviewImage(null)}
+      >
+        {previewImage && (
+          <div className="preview-container">
+            <div className="preview-info">
+              <div className="preview-header">
+                <h2>{previewImage.name}</h2>
+                <span className="preview-close">
+                  <X
+                    color="#cfcfcfff"
+                    size={34}
+                    onClick={() => setPreviewImage(null)}
+                  />
+                </span>
+              </div>
+              <img
+                src={
+                  previewImage.image.startsWith("images/")
+                    ? `/${previewImage.image}`
+                    : previewImage.image
+                }
+                alt={previewImage.name}
+                className="full-preview-img"
+              />
             </div>
           </div>
         )}

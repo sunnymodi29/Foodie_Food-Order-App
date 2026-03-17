@@ -224,24 +224,36 @@ body {
   cursor: pointer;
 }
 
+.food-login-form .forgot-password-control {
+  display: inline;
+  text-align: right;
+}
+
+.food-login-form .signup-btn {
+  margin-top: 1rem;
+}
+
 .food-login-form .forgot-password:hover {
   text-decoration: underline;
 }
 
-.forgot-password-container, .reset-password-container {
+.forgot-password-container,
+.reset-password-container {
   max-width: 400px;
   padding: 100px 0;
   margin: 0 auto;
   text-align: center;
 }
 
-.forgot-password-form, .reset-password-form {
+.forgot-password-form,
+.reset-password-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.forgot-password-form label, .reset-password-form label {
+.forgot-password-form label,
+.reset-password-form label {
   display: none;
 }
 
@@ -605,6 +617,7 @@ h1 {
   cursor: pointer;
   background-color: transparent;
   border: none;
+  outline: none;
   color: var(--themeTextColor);
 }
 
@@ -633,6 +646,22 @@ h1 {
 .modal::backdrop {
   background-color: rgba(0, 0, 0, 0.85);
 }
+
+.modal.edit-meal-modal {
+  overflow: hidden;
+}
+
+.edit-meal-form .form-wrapper {
+  overflow: auto;
+  max-height: 400px;
+  padding: 0 10px;
+  outline: none;
+}
+
+.edit-meal-form .form-wrapper::-webkit-scrollbar {
+  width: 4px;
+}
+
 
 .center {
   text-align: center;
@@ -786,6 +815,26 @@ h1 {
   margin-bottom: 1rem;
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 0.5rem;
+}
+
+.status-delivered {
+  color: #4ade80;
+}
+
+.status-pending {
+  color: #facc15;
+}
+
+.status-cancelled {
+  color: #f87171;
+}
+
+.status-preparing {
+  color: #d2691e;
+}
+
+.status-outfordelivery {
+  color: #4682b4;
 }
 
 .order-address {

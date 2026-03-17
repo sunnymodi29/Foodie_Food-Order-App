@@ -1,7 +1,7 @@
-import logoImg from "../../../assets/logo.jpg";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import "../Sidebar/Sidebar.css";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import "Admin/components/Sidebar/Sidebar.css";
 import {
   AlignLeft,
   X,
@@ -14,7 +14,7 @@ import {
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const closeSidebar = () => setIsOpen(false);
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleResize = () => {
@@ -27,7 +27,7 @@ export default function Sidebar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => pathname === path;
 
   return (
     <>
@@ -40,7 +40,7 @@ export default function Sidebar() {
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="sidebar-brand">
-            <img src={logoImg} alt="Foodie Logo" />
+            <img src="/images/app-logos/logo.jpg" alt="Foodie Logo" />
             <h1>Foodie</h1>
           </div>
           {isOpen && (
@@ -52,28 +52,28 @@ export default function Sidebar() {
 
         <nav className="sidebar-links" onClick={closeSidebar}>
           <Link
-            to="/admin/dashboard"
+            href="/admin/dashboard"
             className={isActive("/admin/dashboard") ? "active" : ""}
           >
             <LayoutDashboard size={18} className="sidebar-icon" />
             Dashboard
           </Link>
           <Link
-            to="/admin/addmeals"
+            href="/admin/addmeals"
             className={isActive("/admin/addmeals") ? "active" : ""}
           >
             <Utensils size={18} className="sidebar-icon" />
             Add Meals
           </Link>
           <Link
-            to="/admin/orders"
+            href="/admin/orders"
             className={isActive("/admin/orders") ? "active" : ""}
           >
             <ClipboardList size={18} className="sidebar-icon" />
             Orders
           </Link>
           <Link
-            to="/admin/menu"
+            href="/admin/menu"
             className={isActive("/admin/menu") ? "active" : ""}
           >
             <SquareMenu size={18} className="sidebar-icon" />

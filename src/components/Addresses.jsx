@@ -1,7 +1,9 @@
+"use client";
+
 import { useState } from "react";
 import Input from "./UI/Input";
 import Button from "./UI/Button";
-import { useAuth } from "../store/AuthContext";
+import { useAuth } from "@/store/AuthContext";
 
 const Addresses = ({
   addresses,
@@ -98,7 +100,10 @@ const Addresses = ({
           <Button type="submit" className="w-100" onClick={handleAddAddress}>
             Save Address
           </Button>
-          <Button className="secondary-button w-100" onClick={handleCancelAddress}>
+          <Button
+            className="secondary-button w-100"
+            onClick={handleCancelAddress}
+          >
             Cancel
           </Button>
         </div>

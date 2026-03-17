@@ -1,14 +1,14 @@
+"use client";
+
 import Modal from "./UI/Modal";
 import { useContext, useEffect, useState } from "react";
-import CartContext from "../store/CartContext";
-import UserProgressContext from "../store/UserProgressContext";
-import Input from "./UI/Input";
+import CartContext from "store/CartContext";
+import UserProgressContext from "store/UserProgressContext";
 import Button from "./UI/Button";
-import useHttp from "../hooks/useHttp";
+import useHttp from "@/hooks/useHttp";
 import Error from "./Error";
-import { useAuth } from "../store/AuthContext";
+import { useAuth } from "@/store/AuthContext";
 import Addresses from "./Addresses";
-import Toastify from "./Toastify";
 import { ChevronLeft } from "lucide-react";
 
 const requestConfig = {
@@ -39,14 +39,11 @@ const Checkout = () => {
     error,
     sendRequest,
     clearData,
-  } = useHttp(
-    "https://foodie-food-order-app.onrender.com/orders",
-    requestConfig
-  );
+  } = useHttp("/api/orders", requestConfig);
 
   const cartTotal = cartCtx.items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.price,
-    0
+    0,
   );
 
   function handleBackToCart() {
@@ -85,7 +82,7 @@ const Checkout = () => {
           items: cartCtx.items,
           customer: selectedAddress,
           user_id: user.id,
-        })
+        }),
       );
     } else {
       setShowError(true);
@@ -98,15 +95,11 @@ const Checkout = () => {
       <Button type="button" className="secondary-button" onClick={handleClose}>
         Close
       </Button>
-      <Button type="submit" onClick={handleSubmit}>
-        Submit Order
+      <Button type="submit" onClick={handleSubmit} disabled={isSending}>
+        {isSending ? "Submitting..." : "Submit Order"}
       </Button>
     </>
   );
-
-  if (isSending) {
-    actions = <span>Sending order data...</span>;
-  }
 
   if (data && !error) {
     return (
@@ -153,14 +146,6 @@ const Checkout = () => {
             Please Select Address Or Add New Address!!
           </p>
         )}
-
-        {/* <Input label="Full Name" id="name" type="text" />
-        <Input label="E-Mail Address" id="email" type="email" />
-        <Input label="Street" id="street" type="text" />
-        <div className="control-row">
-          <Input label="Postal Code" id="postal-code" type="text" />
-          <Input label="City" id="city" type="text" />
-        </div> */}
 
         {error && <Error title="Failed to submit order" message={error} />}
 

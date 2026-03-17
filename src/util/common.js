@@ -15,5 +15,7 @@ function getFirstCharacters(str) {
 export default getFirstCharacters;
 
 export function formatDateTime(str) {
-  return format(new Date(str), "dd MMM yyyy, hh:mm a");
+  if (!str) return "N/A";
+  const date = new Date(str);
+  return isNaN(date.getTime()) ? "Invalid Date" : format(date, "dd MMM yyyy, hh:mm a");
 }

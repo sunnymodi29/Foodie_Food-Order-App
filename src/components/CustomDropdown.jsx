@@ -8,9 +8,10 @@ const CustomDropdown = ({ currencyData, handleCurrencyChange }) => {
 
   // Load selected currency from localStorage on component mount
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
     const storedCurrency =
       localStorage.getItem("currency") ||
-      JSON.parse(localStorage.getItem("user")).currency_code;
+      (storedUser ? JSON.parse(storedUser).currency_code : null);
     if (storedCurrency) {
       const currency = currencyData?.find(
         (curr) => curr.currency_code === storedCurrency

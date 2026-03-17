@@ -608,6 +608,7 @@ h1 {
   cursor: pointer;
   background-color: transparent;
   border: none;
+  outline: none;
   color: var(--themeTextColor);
 }
 
@@ -644,7 +645,8 @@ h1 {
 .edit-meal-form .form-wrapper {
   overflow: auto;
   max-height: 400px;
-  padding: 0 10px 0 0;
+  padding: 0 10px;
+  outline: none;
 }
 
 .edit-meal-form .form-wrapper::-webkit-scrollbar {

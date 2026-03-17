@@ -10,7 +10,7 @@ export async function GET(request, { params }) {
   try {
     const result = await pool.query(
       `
-      SELECT o.*, u.admin
+      SELECT o.*, u.admin, o.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata' AS created_at
       FROM orders o
       JOIN users u ON u.id = $1
       WHERE u.admin = true OR o.user_id = $1

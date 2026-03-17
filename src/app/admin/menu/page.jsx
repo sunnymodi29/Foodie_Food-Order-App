@@ -182,7 +182,14 @@ export default function AdminMenuPage() {
                   </td>
                   <td>{meal.id}</td>
                   <td>{meal.name}</td>
-                  <td>{meal.description}</td>
+                  <td>
+                    <span
+                      className="meal_description"
+                      data-title={meal.description}
+                    >
+                      {meal.description}
+                    </span>
+                  </td>
                   <td>{currencyFormatter(meal.price)}</td>
                   <td className="table_img">
                     <img
@@ -274,6 +281,7 @@ export default function AdminMenuPage() {
             <div className="modal-actions">
               <Button
                 type="button"
+                className="secondary-button"
                 onClick={() => setModals((p) => ({ ...p, edit: false }))}
               >
                 Cancel
@@ -300,11 +308,14 @@ export default function AdminMenuPage() {
             <p>Delete {mealToDelete.name}?</p>
             <div className="modal-actions">
               <Button
+                type="button"
+                className="secondary-button"
                 onClick={() => setModals((p) => ({ ...p, delete: false }))}
               >
                 Cancel
               </Button>
               <Button
+                type="button"
                 onClick={() => {
                   handleDeleteMeal(mealToDelete.id);
                   setModals((p) => ({ ...p, delete: false }));

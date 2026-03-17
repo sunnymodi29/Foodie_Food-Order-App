@@ -55,6 +55,26 @@ export default function AddMealsPage() {
     return () => window.removeEventListener("keydown", handleKeydown);
   }, []);
 
+  // Dynamically set the tooltip content based on the platform
+  useEffect(() => {
+    let isMac = false;
+
+    if (navigator.userAgentData) {
+      // Check if the user agent data is available (modern browsers)
+      isMac = navigator.userAgentData.platform.toLowerCase().includes("mac");
+    } else {
+      // If not, fallback to the user agent string
+      isMac = navigator.userAgent.toLowerCase().includes("mac");
+    }
+
+    const platformUsingKey = isMac ? "Cmd" : "Ctrl";
+
+    const btn = document.querySelector(".ask-ai-wrapper button");
+    if (btn) {
+      btn.setAttribute("data-platform", platformUsingKey);
+    }
+  }, []);
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image") {
